@@ -26,7 +26,6 @@
             padding: 24px 32px;
         }
 
-        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
@@ -67,7 +66,7 @@
             color: #a855f7;
         }
 
-        /* Кнопка Войти и профиль */
+        /* Профиль */
         .auth-area {
             display: flex;
             align-items: center;
@@ -81,6 +80,7 @@
             color: white;
             cursor: pointer;
             transition: 0.2s;
+            font-family: 'Inter', sans-serif;
         }
         .glass-btn:hover {
             background: rgba(168,85,247,0.3);
@@ -89,32 +89,64 @@
         .profile-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(168,85,247,0.4);
             border-radius: 40px;
             padding: 6px 18px 6px 12px;
         }
-        .profile-info .user-data {
+        .user-data {
             display: flex;
             flex-direction: column;
             color: #fff;
         }
-        .profile-info .user-name {
+        .user-name {
             font-weight: 600;
             font-size: 0.9rem;
             line-height: 1.2;
         }
-        .profile-info .user-id {
+        .user-id {
             font-size: 0.7rem;
             color: #a855f7;
             letter-spacing: 0.5px;
         }
-        .profile-info .logout-btn {
+        .balance-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 20px;
+            padding: 4px 10px;
+        }
+        .balance-area .coin-icon {
+            color: #FFD700;
+            font-size: 1rem;
+        }
+        .balance-amount {
+            font-weight: 600;
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+        .topup-btn {
+            background: rgba(168,85,247,0.2);
+            border: 1px solid #a855f7;
+            color: #a855f7;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .topup-btn:hover {
+            background: rgba(168,85,247,0.4);
+        }
+        .logout-btn {
             background: none;
             border: none;
             color: #ff4d6a;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             padding: 4px;
         }
@@ -264,7 +296,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Модальное окно */
+        /* Модальные окна */
         .modal {
             display: none;
             position: fixed;
@@ -366,6 +398,50 @@
             font-family: 'Inter', sans-serif;
         }
 
+        /* Пополнение */
+        .package-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .package-btn {
+            background: rgba(168,85,247,0.1);
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #fff;
+        }
+        .package-btn:hover {
+            background: rgba(168,85,247,0.3);
+            border-color: #a855f7;
+        }
+        .package-amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFD700;
+        }
+        .package-price {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+        .custom-amount {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .custom-amount input {
+            flex: 1;
+        }
+        .price-estimate {
+            margin: 8px 0;
+            font-size: 0.9rem;
+            color: #FFD700;
+        }
+
         footer {
             display: flex;
             justify-content: space-between;
@@ -418,7 +494,6 @@
             </div>
 
             <div class="cards-container">
-                <!-- AI Чат -->
                 <a href="chat.html" class="card-link">
                     <div class="glass-card">
                         <div class="card-header">
@@ -432,8 +507,6 @@
                         <button class="card-btn" type="button">Начать диалог</button>
                     </div>
                 </a>
-
-                <!-- AI Фото -->
                 <a href="photo.html" class="card-link">
                     <div class="glass-card">
                         <div class="card-header">
@@ -446,8 +519,6 @@
                         <button class="card-btn" type="button">Создать изображение</button>
                     </div>
                 </a>
-
-                <!-- AI Видео -->
                 <a href="video.html" class="card-link">
                     <div class="glass-card">
                         <div class="card-header">
@@ -456,12 +527,8 @@
                         </div>
                         <div class="video-preview">
                             <div class="film-strip">
-                                <div class="frame"></div>
-                                <div class="frame"></div>
-                                <div class="frame"></div>
-                                <div class="frame"></div>
-                                <div class="frame"></div>
-                                <div class="frame"></div>
+                                <div class="frame"></div><div class="frame"></div><div class="frame"></div>
+                                <div class="frame"></div><div class="frame"></div><div class="frame"></div>
                             </div>
                             <div class="data-stream"></div>
                         </div>
@@ -481,15 +548,14 @@
         </footer>
     </div>
 
-    <!-- Модальное окно авторизации -->
+    <!-- Модальное окно входа/регистрации -->
     <div class="modal" id="authModal">
         <div class="modal-content">
-            <button class="modal-close" id="closeModal">&times;</button>
+            <button class="modal-close" id="closeAuthModal">&times;</button>
             <div class="modal-tabs">
                 <div class="modal-tab active" data-tab="login">Вход</div>
                 <div class="modal-tab" data-tab="register">Регистрация</div>
             </div>
-            <!-- Форма входа -->
             <form id="loginForm">
                 <div class="form-group">
                     <label>Имя пользователя (латиница)</label>
@@ -502,7 +568,6 @@
                 </div>
                 <button type="submit" class="submit-btn">Войти</button>
             </form>
-            <!-- Форма регистрации (скрыта) -->
             <form id="registerForm" style="display: none;">
                 <div class="form-group">
                     <label>Имя пользователя (латиница)</label>
@@ -524,66 +589,89 @@
         </div>
     </div>
 
+    <!-- Модальное окно пополнения -->
+    <div class="modal" id="topupModal">
+        <div class="modal-content" style="max-width: 420px;">
+            <button class="modal-close" id="closeTopupModal">&times;</button>
+            <h3 style="margin-bottom: 16px; font-weight: 600;">Пополнение AI-Кредитов</h3>
+            <div class="package-grid">
+                <div class="package-btn" data-amount="100">100<br><span class="package-price">99 ₽</span></div>
+                <div class="package-btn" data-amount="500">500<br><span class="package-price">449 ₽</span></div>
+                <div class="package-btn" data-amount="1000">1 000<br><span class="package-price">849 ₽</span></div>
+                <div class="package-btn" data-amount="5000">5 000<br><span class="package-price">3 999 ₽</span></div>
+                <div class="package-btn" data-amount="10000">10 000<br><span class="package-price">7 499 ₽</span></div>
+            </div>
+            <div class="custom-amount">
+                <input type="number" id="customAmount" placeholder="Введите сумму кредитов" min="1">
+                <button class="submit-btn" id="calculateCustomBtn" style="width: auto; margin: 0;">Рассчитать</button>
+            </div>
+            <div class="price-estimate" id="priceEstimate"></div>
+            <button class="submit-btn" id="buyBtn" disabled>Купить</button>
+            <p class="error-msg" id="topupError" style="margin-top: 8px;"></p>
+        </div>
+    </div>
+
     <script>
         (() => {
-            // ---------- localStorage база ----------
-            const STORAGE_KEY = 'aihub_users';
+            // ---------- localStorage ----------
+            const USERS_KEY = 'aihub_users';
             const CURRENT_USER_KEY = 'aihub_currentUser';
+            const BALANCES_KEY = 'aihub_balances';
 
-            function getUsers() {
-                try {
-                    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-                } catch (e) {
-                    return [];
-                }
-            }
+            const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            const getCurrentUser = () => JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+            const setCurrentUser = (user) => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+            const clearCurrentUser = () => localStorage.removeItem(CURRENT_USER_KEY);
 
-            function saveUsers(users) {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
-            }
+            const getBalances = () => JSON.parse(localStorage.getItem(BALANCES_KEY)) || {};
+            const saveBalances = (balances) => localStorage.setItem(BALANCES_KEY, JSON.stringify(balances));
+            const getUserBalance = (userId) => {
+                const b = getBalances();
+                return b[userId] || 0;
+            };
+            const setUserBalance = (userId, amount) => {
+                const b = getBalances();
+                b[userId] = amount;
+                saveBalances(b);
+            };
 
-            function getCurrentUser() {
-                try {
-                    return JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
-                } catch (e) {
-                    return null;
-                }
-            }
+            // Стартовый баланс при регистрации
+            const START_BALANCE = 50;
 
-            function setCurrentUser(user) {
-                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-            }
-
-            function clearCurrentUser() {
-                localStorage.removeItem(CURRENT_USER_KEY);
-            }
-
-            // ---------- DOM элементы ----------
+            // ---------- DOM ----------
             const authArea = document.getElementById('authArea');
-            const authBtn = document.getElementById('authBtn');
-            const modal = document.getElementById('authModal');
-            const closeModalBtn = document.getElementById('closeModal');
-            const tabs = document.querySelectorAll('.modal-tab');
+            const authModal = document.getElementById('authModal');
+            const closeAuthModalBtn = document.getElementById('closeAuthModal');
+            const topupModal = document.getElementById('topupModal');
+            const closeTopupModalBtn = document.getElementById('closeTopupModal');
+            const tabs = document.querySelectorAll('#authModal .modal-tab');
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
-
             const loginName = document.getElementById('loginName');
             const loginPassword = document.getElementById('loginPassword');
             const loginError = document.getElementById('loginError');
-
             const regName = document.getElementById('regName');
             const regPassword = document.getElementById('regPassword');
             const regPassword2 = document.getElementById('regPassword2');
             const regNameError = document.getElementById('regNameError');
             const regPassError = document.getElementById('regPassError');
             const regPass2Error = document.getElementById('regPass2Error');
+            const packageBtns = document.querySelectorAll('.package-btn');
+            const customAmountInput = document.getElementById('customAmount');
+            const priceEstimate = document.getElementById('priceEstimate');
+            const buyBtn = document.getElementById('buyBtn');
+            const topupError = document.getElementById('topupError');
+            const calculateCustomBtn = document.getElementById('calculateCustomBtn');
 
-            // ---------- Функции отображения профиля ----------
+            let selectedAmount = null;
+
+            // ---------- Рендер профиля ----------
             function renderAuthArea() {
                 const user = getCurrentUser();
-                authArea.innerHTML = ''; // очищаем
+                authArea.innerHTML = '';
                 if (user) {
-                    // показываем профиль
+                    const balance = getUserBalance(user.id);
                     const profileDiv = document.createElement('div');
                     profileDiv.className = 'profile-info';
                     profileDiv.innerHTML = `
@@ -591,45 +679,54 @@
                             <span class="user-name">${user.name}</span>
                             <span class="user-id">ID: ${user.id}</span>
                         </div>
+                        <div class="balance-area">
+                            <i class="fas fa-coins coin-icon"></i>
+                            <span class="balance-amount" id="balanceDisplay">${balance}</span>
+                        </div>
+                        <button class="topup-btn" id="topupBtn">+ Пополнить</button>
                         <button class="logout-btn" id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
                     `;
                     authArea.appendChild(profileDiv);
+                    document.getElementById('topupBtn').addEventListener('click', openTopupModal);
                     document.getElementById('logoutBtn').addEventListener('click', logout);
                 } else {
-                    // кнопка Войти
                     const btn = document.createElement('button');
                     btn.className = 'glass-btn';
                     btn.id = 'authBtn';
                     btn.textContent = 'Войти';
-                    btn.addEventListener('click', openModal);
+                    btn.addEventListener('click', openAuthModal);
                     authArea.appendChild(btn);
                 }
             }
 
-            function openModal() {
-                modal.classList.add('active');
-                // сброс полей и ошибок
+            function updateBalanceDisplay() {
+                const user = getCurrentUser();
+                if (user) {
+                    const balance = getUserBalance(user.id);
+                    const disp = document.getElementById('balanceDisplay');
+                    if (disp) disp.textContent = balance;
+                }
+            }
+
+            function openAuthModal() {
+                authModal.classList.add('active');
                 loginForm.reset();
                 registerForm.reset();
-                hideErrors();
-                // вкладка Вход по умолчанию
-                switchTab('login');
+                hideAuthErrors();
+                switchAuthTab('login');
             }
-
-            function closeModal() {
-                modal.classList.remove('active');
+            function closeAuthModal() {
+                authModal.classList.remove('active');
             }
-
-            function hideErrors() {
+            function hideAuthErrors() {
                 loginError.style.display = 'none';
                 regNameError.style.display = 'none';
                 regPassError.style.display = 'none';
                 regPass2Error.style.display = 'none';
             }
-
-            function switchTab(tabName) {
+            function switchAuthTab(tab) {
                 tabs.forEach(t => t.classList.remove('active'));
-                if (tabName === 'login') {
+                if (tab === 'login') {
                     document.querySelector('[data-tab="login"]').classList.add('active');
                     loginForm.style.display = 'block';
                     registerForm.style.display = 'none';
@@ -638,22 +735,20 @@
                     loginForm.style.display = 'none';
                     registerForm.style.display = 'block';
                 }
-                hideErrors();
+                hideAuthErrors();
             }
 
-            // Валидация имени (только латиница и цифры)
             function isValidUsername(name) {
                 return /^[a-zA-Z0-9]+$/.test(name);
             }
-
             function generateUserId() {
                 return 'U' + Math.random().toString(16).slice(2, 10).toUpperCase();
             }
 
-            // ---------- Логика входа ----------
+            // Вход
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                hideErrors();
+                hideAuthErrors();
                 const name = loginName.value.trim();
                 const pass = loginPassword.value;
                 if (!isValidUsername(name)) {
@@ -668,21 +763,18 @@
                     loginError.style.display = 'block';
                     return;
                 }
-                // Успешный вход
                 setCurrentUser({ name: user.name, id: user.id });
-                closeModal();
+                closeAuthModal();
                 renderAuthArea();
             });
 
-            // ---------- Логика регистрации ----------
+            // Регистрация
             registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                hideErrors();
+                hideAuthErrors();
                 const name = regName.value.trim();
                 const pass = regPassword.value;
                 const pass2 = regPassword2.value;
-
-                // Проверки
                 if (!isValidUsername(name)) {
                     regNameError.textContent = 'Имя может содержать только латинские буквы и цифры';
                     regNameError.style.display = 'block';
@@ -698,50 +790,91 @@
                     regPass2Error.style.display = 'block';
                     return;
                 }
-
                 const users = getUsers();
                 if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
                     regNameError.textContent = 'Пользователь с таким именем уже существует';
                     regNameError.style.display = 'block';
                     return;
                 }
-
-                // Создаём нового пользователя
-                const newUser = {
-                    name: name,
-                    password: pass,
-                    id: generateUserId()
-                };
+                const newUser = { name, password: pass, id: generateUserId() };
                 users.push(newUser);
                 saveUsers(users);
-
-                // Автоматический вход после регистрации
+                setUserBalance(newUser.id, START_BALANCE); // стартовые кредиты
                 setCurrentUser({ name: newUser.name, id: newUser.id });
-                closeModal();
+                closeAuthModal();
                 renderAuthArea();
             });
 
-            // Выход
             function logout() {
                 clearCurrentUser();
                 renderAuthArea();
             }
 
-            // Переключение вкладок
             tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabName = tab.dataset.tab;
-                    switchTab(tabName);
+                tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+            });
+            closeAuthModalBtn.addEventListener('click', closeAuthModal);
+            window.addEventListener('click', (e) => {
+                if (e.target === authModal) closeAuthModal();
+                if (e.target === topupModal) closeTopupModal();
+            });
+
+            // ---------- Пополнение ----------
+            function openTopupModal() {
+                topupModal.classList.add('active');
+                selectedAmount = null;
+                customAmountInput.value = '';
+                priceEstimate.textContent = '';
+                buyBtn.disabled = true;
+                topupError.style.display = 'none';
+            }
+            function closeTopupModal() {
+                topupModal.classList.remove('active');
+            }
+            closeTopupModalBtn.addEventListener('click', closeTopupModal);
+
+            packageBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedAmount = parseInt(btn.dataset.amount);
+                    customAmountInput.value = '';
+                    const price = Math.round(selectedAmount * 0.99);
+                    priceEstimate.textContent = `К оплате: ${price} ₽`;
+                    buyBtn.disabled = false;
+                    topupError.style.display = 'none';
                 });
             });
 
-            // Закрытие модального окна
-            closeModalBtn.addEventListener('click', closeModal);
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
+            calculateCustomBtn.addEventListener('click', () => {
+                const val = parseInt(customAmountInput.value);
+                if (isNaN(val) || val < 1) {
+                    priceEstimate.textContent = 'Введите корректную сумму';
+                    buyBtn.disabled = true;
+                    return;
+                }
+                selectedAmount = val;
+                const price = (val * 0.99).toFixed(2);
+                priceEstimate.textContent = `К оплате: ${price} ₽`;
+                buyBtn.disabled = false;
+                topupError.style.display = 'none';
             });
 
-            // Начальный рендер при загрузке
+            buyBtn.addEventListener('click', () => {
+                if (!selectedAmount || selectedAmount < 1) return;
+                const user = getCurrentUser();
+                if (!user) {
+                    topupError.textContent = 'Ошибка авторизации';
+                    topupError.style.display = 'block';
+                    return;
+                }
+                const currentBalance = getUserBalance(user.id);
+                const newBalance = currentBalance + selectedAmount;
+                setUserBalance(user.id, newBalance);
+                updateBalanceDisplay();
+                alert(`✅ Баланс пополнен на ${selectedAmount} AI-Кредитов.\nТекущий баланс: ${newBalance} кредитов.`);
+                closeTopupModal();
+            });
+
+            // Начальный рендер
             renderAuthArea();
         })();
     </script>
