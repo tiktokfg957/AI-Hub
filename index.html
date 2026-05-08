@@ -162,6 +162,12 @@
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
         }
+        .photo-preview {
+            overflow: hidden;   /* ← уже было */
+        }
+        .video-preview {
+            overflow: hidden;   /* ✅ ИСПРАВЛЕНО: теперь анимация не вылезает */
+        }
         .pixel-canvas {
             width: 100%;
             height: 100px;
@@ -185,6 +191,7 @@
             background: linear-gradient(135deg, #1e1a3a, #0e0a1a);
             border: 1px solid #a855f7;
             border-radius: 8px;
+            flex-shrink: 0;
         }
         @keyframes slideStrip {
             0% { transform: translateX(0); }
