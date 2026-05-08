@@ -98,5 +98,15 @@
     </div>
 
     <script src="js/main.js"></script>
+    <script>
+        // Обработка остальных кнопок (alert)
+        document.querySelectorAll('.glass-card .card-btn').forEach(btn => {
+            // Пропускаем кнопку AI Чата, у которой уже есть onclick
+            if (btn.getAttribute('onclick')) return;
+            btn.addEventListener('click', () => {
+                alert('Демо-режим. Функционал будет доступен в следующей версии.');
+            });
+        });
+    </script>
 </body>
 </html>
