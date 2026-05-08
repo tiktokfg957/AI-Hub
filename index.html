@@ -8,20 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Делаем карточку чата кликабельной ссылкой */
-        .chat-card-link {
+        /* Единый стиль для карточек-ссылок */
+        .card-link {
             display: block;
             text-decoration: none;
             color: inherit;
             cursor: pointer;
         }
-        .chat-card-link .glass-card {
+        .card-link .glass-card {
             transition: 0.3s;
         }
-        .chat-card-link:hover .glass-card {
+        .card-link:hover .glass-card {
             transform: translateY(-8px);
             border-color: #a855f7;
             box-shadow: 0 20px 40px rgba(168,85,247,0.2);
+        }
+        /* Кнопки внутри карточек не перехватывают клик, только визуал */
+        .card-btn {
+            pointer-events: none;
         }
     </style>
 </head>
@@ -51,8 +55,8 @@
             </div>
 
             <div class="cards-container">
-                <!-- Карточка AI Чат – ВСЯ карточка кликабельна -->
-                <a href="chat.html" class="chat-card-link">
+                <!-- Карточка AI Чат -->
+                <a href="chat.html" class="card-link">
                     <div class="glass-card" data-card="chat">
                         <div class="card-glow"></div>
                         <div class="card-header">
@@ -66,44 +70,47 @@
                                 <span></span><span></span><span></span>
                             </div>
                         </div>
-                        <!-- Кнопка остаётся для красоты, но теперь необязательна -->
-                        <button class="card-btn" style="pointer-events: none;">Начать диалог</button>
+                        <button class="card-btn">Начать диалог</button>
                     </div>
                 </a>
 
-                <!-- Карточка AI Фото (без изменений) -->
-                <div class="glass-card" data-card="photo">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
-                        <h2>AI Фото</h2>
-                    </div>
-                    <div class="photo-preview">
-                        <div class="pixel-canvas">
-                            <div class="pixel-grid"></div>
-                            <div class="overlay-text">Генерация...</div>
+                <!-- Карточка AI Фото -->
+                <a href="photo.html" class="card-link">
+                    <div class="glass-card" data-card="photo">
+                        <div class="card-glow"></div>
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
+                            <h2>AI Фото</h2>
                         </div>
+                        <div class="photo-preview">
+                            <div class="pixel-canvas">
+                                <div class="pixel-grid"></div>
+                                <div class="overlay-text">Генерация...</div>
+                            </div>
+                        </div>
+                        <button class="card-btn">Создать изображение</button>
                     </div>
-                    <button class="card-btn" id="photoBtn">Создать изображение</button>
-                </div>
+                </a>
 
-                <!-- Карточка AI Видео (без изменений) -->
-                <div class="glass-card" data-card="video">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-film"></i></div>
-                        <h2>AI Видео</h2>
-                    </div>
-                    <div class="video-preview">
-                        <div class="film-strip">
-                            <div class="frame"></div>
-                            <div class="frame"></div>
-                            <div class="frame"></div>
+                <!-- Карточка AI Видео -->
+                <a href="video.html" class="card-link">
+                    <div class="glass-card" data-card="video">
+                        <div class="card-glow"></div>
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fas fa-film"></i></div>
+                            <h2>AI Видео</h2>
                         </div>
-                        <div class="data-stream"></div>
+                        <div class="video-preview">
+                            <div class="film-strip">
+                                <div class="frame"></div>
+                                <div class="frame"></div>
+                                <div class="frame"></div>
+                            </div>
+                            <div class="data-stream"></div>
+                        </div>
+                        <button class="card-btn">Сгенерировать видео</button>
                     </div>
-                    <button class="card-btn" id="videoBtn">Сгенерировать видео</button>
-                </div>
+                </a>
             </div>
         </main>
 
@@ -117,10 +124,11 @@
         </footer>
     </div>
 
+    <script src="js/main.js"></script>
     <script>
-        // Обработчики для остальных кнопок
-        document.getElementById('photoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
-        document.getElementById('videoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
+        // Полностью убираем конфликтующие обработчики для кнопок, оставляем только визуальные эффекты
+        // (main.js уже содержит эффекты наведения и анимации, но если там был код alert – удаляем)
+        // Для уверенности переопределяем клики на ссылках: они работают без вмешательства.
     </script>
 </body>
 </html>
