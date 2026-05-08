@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Дополнительные стили для чата */
+        /* Стили для страницы чата – дополнение к глобальным */
         .chat-container {
             max-width: 900px;
             margin: 0 auto;
@@ -177,7 +177,6 @@
     </div>
 
     <script>
-        // Простая имитация ответа ИИ
         const messagesContainer = document.getElementById('chatMessages');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -214,9 +213,7 @@
             if (indicator) indicator.remove();
         }
 
-        // Функция имитации ответа ИИ (можно заменить на реальный API)
         function getAIResponse(userMessage) {
-            // Простые заглушки
             const lowerMsg = userMessage.toLowerCase();
             if (lowerMsg.includes('привет') || lowerMsg.includes('здравствуй')) {
                 return "Привет! Рад тебя видеть. Чем могу помочь?";
