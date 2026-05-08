@@ -2,16 +2,37 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>AI-Hub | Главная</title>
-    <!-- Подключаем ваш главный CSS файл -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Hub | Искусственный интеллект</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Небольшой фикс для ссылки-кнопки */
+        .card-link {
+            display: block;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-
+    <div class="noise"></div>
+    <div class="glow-orb"></div>
+    
     <div class="container">
-        <header>...</header> <!-- Весь ваш header без изменений -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">✨</div>
+                <span>AI-Hub</span>
+            </div>
+            <nav>
+                <a href="index.html" class="active">Главная</a>
+                <a href="about.html">О нас</a>
+                <a href="blog.html">Блог</a>
+                <a href="contacts.html">Контакты</a>
+            </nav>
+            <button class="glass-btn">Войти</button>
+        </header>
 
         <main>
             <div class="hero">
@@ -20,7 +41,7 @@
             </div>
 
             <div class="cards-container">
-                <!-- КАРТОЧКА AI ЧАТ - ИСПРАВЛЕНА -->
+                <!-- Карточка AI Чат - ИСПРАВЛЕНА -->
                 <div class="glass-card" data-card="chat">
                     <div class="card-glow"></div>
                     <div class="card-header">
@@ -34,21 +55,62 @@
                             <span></span><span></span><span></span>
                         </div>
                     </div>
-                    <!-- ЭТО ИСПРАВЛЕНИЕ - кнопка-ссылка, которая заменит кнопку с onclick -->
-                    <a href="chat.html" style="display: block; text-decoration: none;">
+                    <a href="chat.html" class="card-link">
                         <button class="card-btn">Начать диалог</button>
                     </a>
                 </div>
 
-                <!-- ОСТАЛЬНЫЕ КАРТОЧКИ (AI Фото и AI Видео) оставьте без изменений -->
-                ...
+                <!-- Карточка AI Фото -->
+                <div class="glass-card" data-card="photo">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
+                        <h2>AI Фото</h2>
+                    </div>
+                    <div class="photo-preview">
+                        <div class="pixel-canvas">
+                            <div class="pixel-grid"></div>
+                            <div class="overlay-text">Генерация...</div>
+                        </div>
+                    </div>
+                    <button class="card-btn" id="photoBtn">Создать изображение</button>
+                </div>
+
+                <!-- Карточка AI Видео -->
+                <div class="glass-card" data-card="video">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-film"></i></div>
+                        <h2>AI Видео</h2>
+                    </div>
+                    <div class="video-preview">
+                        <div class="film-strip">
+                            <div class="frame"></div>
+                            <div class="frame"></div>
+                            <div class="frame"></div>
+                        </div>
+                        <div class="data-stream"></div>
+                    </div>
+                    <button class="card-btn" id="videoBtn">Сгенерировать видео</button>
+                </div>
             </div>
         </main>
 
-        <footer>...</footer>
+        <footer>
+            <p>© 2026 AI-Hub. Все права защищены.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+        </footer>
     </div>
 
-    <!-- Подключаем ваш JS файл (оставьте как есть) -->
-    <script src="js/main.js"></script>
+    <!-- НЕТ ПОДКЛЮЧЕНИЯ main.js – только простой скрипт для остальных кнопок -->
+    <script>
+        // Простые обработчики для демо-кнопок
+        document.getElementById('photoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
+        document.getElementById('videoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
+    </script>
 </body>
 </html>
