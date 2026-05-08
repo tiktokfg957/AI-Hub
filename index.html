@@ -48,7 +48,7 @@
                             <span></span><span></span><span></span>
                         </div>
                     </div>
-                    <button class="card-btn" onclick="window.location.href='chat.html'">Начать диалог</button>
+                    <button class="card-btn" id="chatBtn">Начать диалог</button>
                 </div>
 
                 <!-- Карточка AI Фото -->
@@ -64,7 +64,7 @@
                             <div class="overlay-text">Генерация...</div>
                         </div>
                     </div>
-                    <button class="card-btn">Создать изображение</button>
+                    <button class="card-btn" id="photoBtn">Создать изображение</button>
                 </div>
 
                 <!-- Карточка AI Видео -->
@@ -82,7 +82,7 @@
                         </div>
                         <div class="data-stream"></div>
                     </div>
-                    <button class="card-btn">Сгенерировать видео</button>
+                    <button class="card-btn" id="videoBtn">Сгенерировать видео</button>
                 </div>
             </div>
         </main>
@@ -99,14 +99,17 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Обработка остальных кнопок (alert)
-        document.querySelectorAll('.glass-card .card-btn').forEach(btn => {
-            // Пропускаем кнопку AI Чата, у которой уже есть onclick
-            if (btn.getAttribute('onclick')) return;
-            btn.addEventListener('click', () => {
-                alert('Демо-режим. Функционал будет доступен в следующей версии.');
+        // Надёжная обработка кнопки чата
+        const chatBtn = document.getElementById('chatBtn');
+        if (chatBtn) {
+            chatBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'chat.html';
             });
-        });
+        }
+        // Остальные кнопки – демо
+        document.getElementById('photoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
+        document.getElementById('videoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
     </script>
 </body>
 </html>
