@@ -7,10 +7,53 @@
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .generator-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: rgba(20,20,40,0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(168,85,247,0.3);
+            padding: 32px;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(168,85,247,0.5);
+            border-radius: 24px;
+            padding: 16px;
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            margin: 20px 0;
+        }
+        .generate-btn {
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 24px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+        }
+    </style>
 </head>
 <body>
     <div class="noise"></div>
     <div class="glow-orb"></div>
+
     <div class="container">
         <header>
             <div class="logo">
@@ -25,12 +68,45 @@
             </nav>
             <button class="glass-btn" onclick="window.location.href='index.html'">На главную</button>
         </header>
-        <main style="text-align: center; padding: 80px 20px;">
-            <h1 style="font-size: 3rem; margin-bottom: 20px;">AI Видео</h1>
-            <p style="font-size: 1.2rem; color: #aaa;">Скоро здесь появится генерация видео на основе искусственного интеллекта.</p>
-            <button class="card-btn" onclick="window.location.href='index.html'" style="margin-top: 40px;">Вернуться на главную</button>
-        </main>
+
+        <div class="generator-container">
+            <div class="card-header" style="justify-content: center;">
+                <div class="card-icon"><i class="fas fa-film"></i></div>
+                <h2>Генератор видео</h2>
+            </div>
+            <p>Опишите сюжет или сцену. AI создаст короткий видеоролик.</p>
+            <textarea id="promptInput" rows="4" placeholder="Например: «Закат на Марсе, дюны, космический корабль вдалеке»"></textarea>
+            <button class="generate-btn" id="generateBtn">Создать видео</button>
+            <div class="result-area" id="resultArea">
+                Здесь появится результат генерации
+            </div>
+        </div>
+
         <footer>...</footer>
     </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt) {
+                alert('Введите описание видео');
+                return;
+            }
+            const resultDiv = document.getElementById('resultArea');
+            resultDiv.innerHTML = '<div class="spinner" style="margin: 0 auto;"></div><div style="margin-top: 12px;">Генерация видео (может занять до 30 секунд)...</div>';
+            setTimeout(() => {
+                resultDiv.innerHTML = `
+                    <div style="text-align: center;">
+                        <i class="fas fa-video" style="font-size: 3rem; color: #a855f7; margin-bottom: 12px; display: block;"></i>
+                        <strong>Ваше видео готово!</strong><br>
+                        🎬 (Демо-режим. Реальная генерация будет доступна в следующей версии.)
+                        <div style="margin-top: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 16px;">
+                            📽️ Сценарий: «${prompt.slice(0, 100)}${prompt.length > 100 ? '…' : ''}»
+                        </div>
+                    </div>
+                `;
+            }, 3000);
+        });
+    </script>
 </body>
 </html>
