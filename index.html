@@ -292,15 +292,6 @@
             transition: 0.2s;
             font-family: 'Inter', sans-serif;
         }
-        .price-tag {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: #FFD700;
-        }
-        .price-tag i {
-            margin-right: 4px;
-        }
 
         .modal {
             display: none;
@@ -520,7 +511,6 @@
                             <div class="pixel-canvas"></div>
                         </div>
                         <button class="card-btn" type="button">Создать изображение</button>
-                        <div class="price-tag"><i class="fas fa-coins"></i> 5 AI-Кредитов</div>
                     </div>
                 </a>
                 <a href="video.html" class="card-link">
@@ -537,7 +527,6 @@
                             <div class="data-stream"></div>
                         </div>
                         <button class="card-btn" type="button">Сгенерировать видео</button>
-                        <div class="price-tag"><i class="fas fa-coins"></i> 25 AI-Кредитов</div>
                     </div>
                 </a>
             </div>
@@ -553,7 +542,7 @@
         </footer>
     </div>
 
-    <!-- Модалки входа/регистрации и пополнения -->
+    <!-- Модалки -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <button class="modal-close" id="closeAuthModal">&times;</button>
@@ -800,7 +789,9 @@
                 renderAuthArea();
             }
 
-            tabs.forEach(tab => tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab)));
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
+            });
             closeAuthModalBtn.addEventListener('click', closeAuthModal);
             window.addEventListener('click', (e) => {
                 if (e.target === authModal) closeAuthModal();
