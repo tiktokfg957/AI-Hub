@@ -66,7 +66,6 @@
             color: #a855f7;
         }
 
-        /* Профиль */
         .auth-area {
             display: flex;
             align-items: center;
@@ -151,7 +150,6 @@
             padding: 4px;
         }
 
-        /* Герой */
         .hero {
             text-align: center;
             margin-bottom: 80px;
@@ -170,7 +168,6 @@
             color: #aaa;
         }
 
-        /* Карточки */
         .cards-container {
             display: flex;
             justify-content: center;
@@ -295,8 +292,16 @@
             transition: 0.2s;
             font-family: 'Inter', sans-serif;
         }
+        .price-tag {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #FFD700;
+        }
+        .price-tag i {
+            margin-right: 4px;
+        }
 
-        /* Модальные окна */
         .modal {
             display: none;
             position: fixed;
@@ -397,8 +402,6 @@
             margin-top: 8px;
             font-family: 'Inter', sans-serif;
         }
-
-        /* Пополнение */
         .package-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -517,6 +520,7 @@
                             <div class="pixel-canvas"></div>
                         </div>
                         <button class="card-btn" type="button">Создать изображение</button>
+                        <div class="price-tag"><i class="fas fa-coins"></i> 5 AI-Кредитов</div>
                     </div>
                 </a>
                 <a href="video.html" class="card-link">
@@ -533,6 +537,7 @@
                             <div class="data-stream"></div>
                         </div>
                         <button class="card-btn" type="button">Сгенерировать видео</button>
+                        <div class="price-tag"><i class="fas fa-coins"></i> 25 AI-Кредитов</div>
                     </div>
                 </a>
             </div>
@@ -548,7 +553,7 @@
         </footer>
     </div>
 
-    <!-- Модальное окно входа/регистрации -->
+    <!-- Модалки входа/регистрации и пополнения -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <button class="modal-close" id="closeAuthModal">&times;</button>
@@ -589,7 +594,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно пополнения -->
     <div class="modal" id="topupModal">
         <div class="modal-content" style="max-width: 420px;">
             <button class="modal-close" id="closeTopupModal">&times;</button>
@@ -613,7 +617,6 @@
 
     <script>
         (() => {
-            // ---------- localStorage ----------
             const USERS_KEY = 'aihub_users';
             const CURRENT_USER_KEY = 'aihub_currentUser';
             const BALANCES_KEY = 'aihub_balances';
@@ -623,7 +626,6 @@
             const getCurrentUser = () => JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
             const setCurrentUser = (user) => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
             const clearCurrentUser = () => localStorage.removeItem(CURRENT_USER_KEY);
-
             const getBalances = () => JSON.parse(localStorage.getItem(BALANCES_KEY)) || {};
             const saveBalances = (balances) => localStorage.setItem(BALANCES_KEY, JSON.stringify(balances));
             const getUserBalance = (userId) => {
@@ -635,11 +637,8 @@
                 b[userId] = amount;
                 saveBalances(b);
             };
-
-            // Стартовый баланс при регистрации
             const START_BALANCE = 50;
 
-            // ---------- DOM ----------
             const authArea = document.getElementById('authArea');
             const authModal = document.getElementById('authModal');
             const closeAuthModalBtn = document.getElementById('closeAuthModal');
@@ -666,7 +665,6 @@
 
             let selectedAmount = null;
 
-            // ---------- Рендер профиля ----------
             function renderAuthArea() {
                 const user = getCurrentUser();
                 authArea.innerHTML = '';
@@ -715,9 +713,7 @@
                 hideAuthErrors();
                 switchAuthTab('login');
             }
-            function closeAuthModal() {
-                authModal.classList.remove('active');
-            }
+            function closeAuthModal() { authModal.classList.remove('active'); }
             function hideAuthErrors() {
                 loginError.style.display = 'none';
                 regNameError.style.display = 'none';
@@ -738,14 +734,9 @@
                 hideAuthErrors();
             }
 
-            function isValidUsername(name) {
-                return /^[a-zA-Z0-9]+$/.test(name);
-            }
-            function generateUserId() {
-                return 'U' + Math.random().toString(16).slice(2, 10).toUpperCase();
-            }
+            function isValidUsername(name) { return /^[a-zA-Z0-9]+$/.test(name); }
+            function generateUserId() { return 'U' + Math.random().toString(16).slice(2, 10).toUpperCase(); }
 
-            // Вход
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 hideAuthErrors();
@@ -768,7 +759,6 @@
                 renderAuthArea();
             });
 
-            // Регистрация
             registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 hideAuthErrors();
@@ -799,7 +789,7 @@
                 const newUser = { name, password: pass, id: generateUserId() };
                 users.push(newUser);
                 saveUsers(users);
-                setUserBalance(newUser.id, START_BALANCE); // стартовые кредиты
+                setUserBalance(newUser.id, START_BALANCE);
                 setCurrentUser({ name: newUser.name, id: newUser.id });
                 closeAuthModal();
                 renderAuthArea();
@@ -810,16 +800,13 @@
                 renderAuthArea();
             }
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
-            });
+            tabs.forEach(tab => tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab)));
             closeAuthModalBtn.addEventListener('click', closeAuthModal);
             window.addEventListener('click', (e) => {
                 if (e.target === authModal) closeAuthModal();
                 if (e.target === topupModal) closeTopupModal();
             });
 
-            // ---------- Пополнение ----------
             function openTopupModal() {
                 topupModal.classList.add('active');
                 selectedAmount = null;
@@ -828,9 +815,7 @@
                 buyBtn.disabled = true;
                 topupError.style.display = 'none';
             }
-            function closeTopupModal() {
-                topupModal.classList.remove('active');
-            }
+            function closeTopupModal() { topupModal.classList.remove('active'); }
             closeTopupModalBtn.addEventListener('click', closeTopupModal);
 
             packageBtns.forEach(btn => {
@@ -874,7 +859,6 @@
                 closeTopupModal();
             });
 
-            // Начальный рендер
             renderAuthArea();
         })();
     </script>
