@@ -15,12 +15,18 @@ const chatPreview = document.querySelector('.chat-preview');
 if (chatPreview) {
     setInterval(() => {
         const indicator = document.querySelector('.typing-indicator');
-        if (indicator) indicator.style.opacity = indicator.style.opacity === '0.3' ? '1' : '0.3';
+        if (indicator) {
+            indicator.style.opacity = indicator.style.opacity === '0.3' ? '1' : '0.3';
+        }
     }, 500);
 }
 
-// Клики на кнопки (пока просто alert)
-document.querySelectorAll('.card-btn').forEach(btn => {
+// КОД КНОПОК: перехватываем все кнопки, но пропускаем кнопку чата
+const allButtons = document.querySelectorAll('.card-btn');
+allButtons.forEach(btn => {
+    // Пропускаем кнопку с id 'chatBtn'
+    if (btn.id === 'chatBtn') return;
+
     btn.addEventListener('click', (e) => {
         e.stopPropagation();
         alert('Демо-режим. Функционал будет доступен в следующей версии.');
