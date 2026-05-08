@@ -26,6 +26,7 @@
             padding: 24px 32px;
         }
 
+        /* Шапка */
         header {
             display: flex;
             justify-content: space-between;
@@ -65,6 +66,13 @@
         nav a:hover, nav a.active {
             color: #a855f7;
         }
+
+        /* Кнопка Войти и профиль */
+        .auth-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
         .glass-btn {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.2);
@@ -72,8 +80,46 @@
             border-radius: 40px;
             color: white;
             cursor: pointer;
+            transition: 0.2s;
+        }
+        .glass-btn:hover {
+            background: rgba(168,85,247,0.3);
+            border-color: #a855f7;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 40px;
+            padding: 6px 18px 6px 12px;
+        }
+        .profile-info .user-data {
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+        }
+        .profile-info .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+        .profile-info .user-id {
+            font-size: 0.7rem;
+            color: #a855f7;
+            letter-spacing: 0.5px;
+        }
+        .profile-info .logout-btn {
+            background: none;
+            border: none;
+            color: #ff4d6a;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
         }
 
+        /* Герой */
         .hero {
             text-align: center;
             margin-bottom: 80px;
@@ -92,6 +138,7 @@
             color: #aaa;
         }
 
+        /* Карточки */
         .cards-container {
             display: flex;
             justify-content: center;
@@ -176,12 +223,10 @@
             0% { background-position: 0 0; }
             100% { background-position: 40px 40px; }
         }
-
-        /* Новый контейнер для бесшовной прокрутки */
         .film-strip {
             display: flex;
             gap: 8px;
-            width: max-content;        /* чтобы вместить все кадры */
+            width: max-content;
             animation: slideStrip 4s linear infinite;
         }
         .frame {
@@ -196,7 +241,6 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-
         .data-stream {
             height: 4px;
             background: linear-gradient(90deg, transparent, #a855f7, #ec4899, transparent);
@@ -217,6 +261,109 @@
             cursor: pointer;
             margin-top: 16px;
             transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: rgba(20,20,40,0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #aaa;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .modal-tab.active {
+            color: #a855f7;
+            border-bottom-color: #a855f7;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+        .form-group input {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(168,85,247,0.5);
+            border-radius: 12px;
+            padding: 12px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #a855f7;
+        }
+        .error-msg {
+            color: #ff6b7a;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
         }
 
         footer {
@@ -259,7 +406,9 @@
                 <a href="blog.html">Блог</a>
                 <a href="contacts.html">Контакты</a>
             </nav>
-            <button class="glass-btn">Войти</button>
+            <div class="auth-area" id="authArea">
+                <button class="glass-btn" id="authBtn">Войти</button>
+            </div>
         </header>
 
         <main>
@@ -280,7 +429,7 @@
                             <div class="message-bubble user">Напиши стих про технологии</div>
                             <div class="message-bubble ai">Сеть сплетает провода,<br>В ней пульс идей, как ток, течёт...</div>
                         </div>
-                        <button class="card-btn">Начать диалог</button>
+                        <button class="card-btn" type="button">Начать диалог</button>
                     </div>
                 </a>
 
@@ -294,7 +443,7 @@
                         <div class="photo-preview">
                             <div class="pixel-canvas"></div>
                         </div>
-                        <button class="card-btn">Создать изображение</button>
+                        <button class="card-btn" type="button">Создать изображение</button>
                     </div>
                 </a>
 
@@ -316,7 +465,7 @@
                             </div>
                             <div class="data-stream"></div>
                         </div>
-                        <button class="card-btn">Сгенерировать видео</button>
+                        <button class="card-btn" type="button">Сгенерировать видео</button>
                     </div>
                 </a>
             </div>
@@ -331,5 +480,270 @@
             </div>
         </footer>
     </div>
+
+    <!-- Модальное окно авторизации -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <div class="modal-tabs">
+                <div class="modal-tab active" data-tab="login">Вход</div>
+                <div class="modal-tab" data-tab="register">Регистрация</div>
+            </div>
+            <!-- Форма входа -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Имя пользователя (латиница)</label>
+                    <input type="text" id="loginName" placeholder="username" required>
+                    <div class="error-msg" id="loginError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="Пароль" required>
+                </div>
+                <button type="submit" class="submit-btn">Войти</button>
+            </form>
+            <!-- Форма регистрации (скрыта) -->
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>Имя пользователя (латиница)</label>
+                    <input type="text" id="regName" placeholder="username" required>
+                    <div class="error-msg" id="regNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Пароль (минимум 6 символов)</label>
+                    <input type="password" id="regPassword" placeholder="Пароль" required>
+                    <div class="error-msg" id="regPassError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Повторите пароль</label>
+                    <input type="password" id="regPassword2" placeholder="Пароль ещё раз" required>
+                    <div class="error-msg" id="regPass2Error"></div>
+                </div>
+                <button type="submit" class="submit-btn">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            // ---------- localStorage база ----------
+            const STORAGE_KEY = 'aihub_users';
+            const CURRENT_USER_KEY = 'aihub_currentUser';
+
+            function getUsers() {
+                try {
+                    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveUsers(users) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+            }
+
+            function getCurrentUser() {
+                try {
+                    return JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function setCurrentUser(user) {
+                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+            }
+
+            function clearCurrentUser() {
+                localStorage.removeItem(CURRENT_USER_KEY);
+            }
+
+            // ---------- DOM элементы ----------
+            const authArea = document.getElementById('authArea');
+            const authBtn = document.getElementById('authBtn');
+            const modal = document.getElementById('authModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const tabs = document.querySelectorAll('.modal-tab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+
+            const loginName = document.getElementById('loginName');
+            const loginPassword = document.getElementById('loginPassword');
+            const loginError = document.getElementById('loginError');
+
+            const regName = document.getElementById('regName');
+            const regPassword = document.getElementById('regPassword');
+            const regPassword2 = document.getElementById('regPassword2');
+            const regNameError = document.getElementById('regNameError');
+            const regPassError = document.getElementById('regPassError');
+            const regPass2Error = document.getElementById('regPass2Error');
+
+            // ---------- Функции отображения профиля ----------
+            function renderAuthArea() {
+                const user = getCurrentUser();
+                authArea.innerHTML = ''; // очищаем
+                if (user) {
+                    // показываем профиль
+                    const profileDiv = document.createElement('div');
+                    profileDiv.className = 'profile-info';
+                    profileDiv.innerHTML = `
+                        <div class="user-data">
+                            <span class="user-name">${user.name}</span>
+                            <span class="user-id">ID: ${user.id}</span>
+                        </div>
+                        <button class="logout-btn" id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
+                    `;
+                    authArea.appendChild(profileDiv);
+                    document.getElementById('logoutBtn').addEventListener('click', logout);
+                } else {
+                    // кнопка Войти
+                    const btn = document.createElement('button');
+                    btn.className = 'glass-btn';
+                    btn.id = 'authBtn';
+                    btn.textContent = 'Войти';
+                    btn.addEventListener('click', openModal);
+                    authArea.appendChild(btn);
+                }
+            }
+
+            function openModal() {
+                modal.classList.add('active');
+                // сброс полей и ошибок
+                loginForm.reset();
+                registerForm.reset();
+                hideErrors();
+                // вкладка Вход по умолчанию
+                switchTab('login');
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+            }
+
+            function hideErrors() {
+                loginError.style.display = 'none';
+                regNameError.style.display = 'none';
+                regPassError.style.display = 'none';
+                regPass2Error.style.display = 'none';
+            }
+
+            function switchTab(tabName) {
+                tabs.forEach(t => t.classList.remove('active'));
+                if (tabName === 'login') {
+                    document.querySelector('[data-tab="login"]').classList.add('active');
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                } else {
+                    document.querySelector('[data-tab="register"]').classList.add('active');
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                }
+                hideErrors();
+            }
+
+            // Валидация имени (только латиница и цифры)
+            function isValidUsername(name) {
+                return /^[a-zA-Z0-9]+$/.test(name);
+            }
+
+            function generateUserId() {
+                return 'U' + Math.random().toString(16).slice(2, 10).toUpperCase();
+            }
+
+            // ---------- Логика входа ----------
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                hideErrors();
+                const name = loginName.value.trim();
+                const pass = loginPassword.value;
+                if (!isValidUsername(name)) {
+                    loginError.textContent = 'Имя может содержать только латинские буквы и цифры';
+                    loginError.style.display = 'block';
+                    return;
+                }
+                const users = getUsers();
+                const user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === pass);
+                if (!user) {
+                    loginError.textContent = 'Неверное имя пользователя или пароль';
+                    loginError.style.display = 'block';
+                    return;
+                }
+                // Успешный вход
+                setCurrentUser({ name: user.name, id: user.id });
+                closeModal();
+                renderAuthArea();
+            });
+
+            // ---------- Логика регистрации ----------
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                hideErrors();
+                const name = regName.value.trim();
+                const pass = regPassword.value;
+                const pass2 = regPassword2.value;
+
+                // Проверки
+                if (!isValidUsername(name)) {
+                    regNameError.textContent = 'Имя может содержать только латинские буквы и цифры';
+                    regNameError.style.display = 'block';
+                    return;
+                }
+                if (pass.length < 6) {
+                    regPassError.textContent = 'Пароль должен быть не менее 6 символов';
+                    regPassError.style.display = 'block';
+                    return;
+                }
+                if (pass !== pass2) {
+                    regPass2Error.textContent = 'Пароли не совпадают';
+                    regPass2Error.style.display = 'block';
+                    return;
+                }
+
+                const users = getUsers();
+                if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
+                    regNameError.textContent = 'Пользователь с таким именем уже существует';
+                    regNameError.style.display = 'block';
+                    return;
+                }
+
+                // Создаём нового пользователя
+                const newUser = {
+                    name: name,
+                    password: pass,
+                    id: generateUserId()
+                };
+                users.push(newUser);
+                saveUsers(users);
+
+                // Автоматический вход после регистрации
+                setCurrentUser({ name: newUser.name, id: newUser.id });
+                closeModal();
+                renderAuthArea();
+            });
+
+            // Выход
+            function logout() {
+                clearCurrentUser();
+                renderAuthArea();
+            }
+
+            // Переключение вкладок
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+
+            // Закрытие модального окна
+            closeModalBtn.addEventListener('click', closeModal);
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // Начальный рендер при загрузке
+            renderAuthArea();
+        })();
+    </script>
 </body>
 </html>
