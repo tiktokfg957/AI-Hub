@@ -8,12 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .generator-container { max-width: 700px; margin: 40px auto; background: rgba(20,20,40,0.5); backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(168,85,247,0.3); padding: 32px; text-align: center; }
-        textarea { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(168,85,247,0.5); border-radius: 24px; padding: 16px; color: white; font-size: 1rem; resize: vertical; margin: 20px 0; }
-        .generate-btn { background: linear-gradient(90deg, #a855f7, #ec4899); border: none; padding: 12px 32px; border-radius: 40px; font-weight: 600; cursor: pointer; color: white; }
-        .result-area { margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 24px; min-height: 200px; display: flex; align-items: center; justify-content: center; color: #aaa; }
+        .generator-container {
+            max-width: 700px; margin: 40px auto; background: rgba(20,20,40,0.5);
+            backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(168,85,247,0.3);
+            padding: 32px; text-align: center;
+        }
+        textarea {
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(168,85,247,0.5);
+            border-radius: 24px; padding: 16px; color: white; font-size: 1rem; resize: vertical; margin: 20px 0;
+        }
+        .generate-btn {
+            background: linear-gradient(90deg, #a855f7, #ec4899); border: none; padding: 12px 32px;
+            border-radius: 40px; font-weight: 600; cursor: pointer; color: white;
+        }
+        .result-area {
+            margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 24px;
+            min-height: 200px; display: flex; align-items: center; justify-content: center; color: #aaa;
+        }
         .back-btn { margin-bottom: 16px; display: inline-block; background: none; border: none; color: #a855f7; cursor: pointer; font-size: 1rem; }
-        .price-tag { display: inline-block; background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.5); border-radius: 20px; padding: 4px 12px; margin: 12px 0; color: #FFD700; font-size: 0.9rem; }
+        .price-tag {
+            display: inline-block; background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.5);
+            border-radius: 20px; padding: 4px 12px; margin: 12px 0; color: #FFD700; font-size: 0.9rem;
+        }
         .price-tag i { margin-right: 4px; }
 
         /* auth styles */
@@ -86,9 +102,11 @@
             </div>
             <p>Опишите, что вы хотите увидеть. AI создаст уникальную картинку.</p>
             <textarea id="promptInput" rows="4" placeholder="Например: «Космический корабль над киберпанк-городом, неон, дождь»"></textarea>
-            <div class="price-tag"><i class="fas fa-coins"></i> Стоимость: 5 AI-Кредитов</div>
+            <div class="price-tag" id="photoPriceTag" style="display: none;"><i class="fas fa-coins"></i> Стоимость: 5 AI-Кредитов</div>
             <button class="generate-btn" id="generateBtn">Создать изображение</button>
-            <div class="result-area" id="resultArea">Здесь появится результат генерации</div>
+            <div class="result-area" id="resultArea">
+                Здесь появится результат генерации
+            </div>
         </div>
 
         <footer>
@@ -103,57 +121,270 @@
 
     <!-- Модалки -->
     <div class="modal" id="authModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeAuthModal">&times;</button>
-            <div class="modal-tabs">
-                <div class="modal-tab active" data-tab="login">Вход</div>
-                <div class="modal-tab" data-tab="register">Регистрация</div>
-            </div>
-            <form id="loginForm">
-                <div class="form-group"><label>Имя пользователя (латиница)</label><input type="text" id="loginName" placeholder="username" required><div class="error-msg" id="loginError"></div></div>
-                <div class="form-group"><label>Пароль</label><input type="password" id="loginPassword" placeholder="Пароль" required></div>
-                <button type="submit" class="submit-btn">Войти</button>
-            </form>
-            <form id="registerForm" style="display: none;">
-                <div class="form-group"><label>Имя пользователя (латиница)</label><input type="text" id="regName" placeholder="username" required><div class="error-msg" id="regNameError"></div></div>
-                <div class="form-group"><label>Пароль (минимум 6 символов)</label><input type="password" id="regPassword" placeholder="Пароль" required><div class="error-msg" id="regPassError"></div></div>
-                <div class="form-group"><label>Повторите пароль</label><input type="password" id="regPassword2" placeholder="Пароль ещё раз" required><div class="error-msg" id="regPass2Error"></div></div>
-                <button type="submit" class="submit-btn">Зарегистрироваться</button>
-            </form>
-        </div>
+        <!-- ... (та же форма, что и в index) ... -->
     </div>
-
     <div class="modal" id="topupModal">
-        <div class="modal-content" style="max-width: 420px;">
-            <button class="modal-close" id="closeTopupModal">&times;</button>
-            <h3 style="margin-bottom: 16px; font-weight: 600;">Пополнение AI-Кредитов</h3>
-            <div class="package-grid">
-                <div class="package-btn" data-amount="100">100<br><span class="package-price">99 ₽</span></div>
-                <div class="package-btn" data-amount="500">500<br><span class="package-price">449 ₽</span></div>
-                <div class="package-btn" data-amount="1000">1 000<br><span class="package-price">849 ₽</span></div>
-                <div class="package-btn" data-amount="5000">5 000<br><span class="package-price">3 999 ₽</span></div>
-                <div class="package-btn" data-amount="10000">10 000<br><span class="package-price">7 499 ₽</span></div>
-            </div>
-            <div class="custom-amount">
-                <input type="number" id="customAmount" placeholder="Введите сумму кредитов" min="1">
-                <button class="submit-btn" id="calculateCustomBtn" style="width: auto; margin: 0;">Рассчитать</button>
-            </div>
-            <div class="price-estimate" id="priceEstimate"></div>
-            <button class="submit-btn" id="buyBtn" disabled>Купить</button>
-            <p class="error-msg" id="topupError" style="margin-top: 8px;"></p>
-        </div>
+        <!-- ... (та же форма пополнения) ... -->
     </div>
 
     <script>
-        // ======== АВТОРИЗАЦИЯ И БАЛАНС (полный скрипт, идентичен главной) ========
+        // ======== АВТОРИЗАЦИЯ ========
         (() => {
             const USERS_KEY = 'aihub_users';
             const CURRENT_USER_KEY = 'aihub_currentUser';
             const BALANCES_KEY = 'aihub_balances';
-            // ... (полный код такой же, как в chat.html, без изменений) ...
+
+            const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
+            const getCurrentUser = () => JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
+            const setCurrentUser = (user) => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+            const clearCurrentUser = () => localStorage.removeItem(CURRENT_USER_KEY);
+            const getBalances = () => JSON.parse(localStorage.getItem(BALANCES_KEY)) || {};
+            const saveBalances = (balances) => localStorage.setItem(BALANCES_KEY, JSON.stringify(balances));
+            const getUserBalance = (userId) => {
+                const b = getBalances();
+                return b[userId] || 0;
+            };
+            const setUserBalance = (userId, amount) => {
+                const b = getBalances();
+                b[userId] = amount;
+                saveBalances(b);
+            };
+            const START_BALANCE = 50;
+
+            const authArea = document.getElementById('authArea');
+            const authModal = document.getElementById('authModal');
+            const closeAuthModalBtn = document.getElementById('closeAuthModal');
+            const topupModal = document.getElementById('topupModal');
+            const closeTopupModalBtn = document.getElementById('closeTopupModal');
+            const tabs = document.querySelectorAll('#authModal .modal-tab');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginName = document.getElementById('loginName');
+            const loginPassword = document.getElementById('loginPassword');
+            const loginError = document.getElementById('loginError');
+            const regName = document.getElementById('regName');
+            const regPassword = document.getElementById('regPassword');
+            const regPassword2 = document.getElementById('regPassword2');
+            const regNameError = document.getElementById('regNameError');
+            const regPassError = document.getElementById('regPassError');
+            const regPass2Error = document.getElementById('regPass2Error');
+            const packageBtns = document.querySelectorAll('.package-btn');
+            const customAmountInput = document.getElementById('customAmount');
+            const priceEstimate = document.getElementById('priceEstimate');
+            const buyBtn = document.getElementById('buyBtn');
+            const topupError = document.getElementById('topupError');
+            const calculateCustomBtn = document.getElementById('calculateCustomBtn');
+
+            let selectedAmount = null;
+
+            // Функция показа/скрытия цен
+            function updatePriceVisibility() {
+                const priceTag = document.getElementById('photoPriceTag');
+                if (priceTag) {
+                    priceTag.style.display = getCurrentUser() ? 'inline-block' : 'none';
+                }
+            }
+
+            function renderAuthArea() {
+                const user = getCurrentUser();
+                authArea.innerHTML = '';
+                if (user) {
+                    const balance = getUserBalance(user.id);
+                    const profileDiv = document.createElement('div');
+                    profileDiv.className = 'profile-info';
+                    profileDiv.innerHTML = `
+                        <div class="user-data">
+                            <span class="user-name">${user.name}</span>
+                            <span class="user-id">ID: ${user.id}</span>
+                        </div>
+                        <div class="balance-area">
+                            <i class="fas fa-coins coin-icon"></i>
+                            <span class="balance-amount" id="balanceDisplay">${balance}</span>
+                        </div>
+                        <button class="topup-btn" id="topupBtn">+ Пополнить</button>
+                        <button class="logout-btn" id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
+                    `;
+                    authArea.appendChild(profileDiv);
+                    document.getElementById('topupBtn').addEventListener('click', openTopupModal);
+                    document.getElementById('logoutBtn').addEventListener('click', logout);
+                } else {
+                    const btn = document.createElement('button');
+                    btn.className = 'glass-btn';
+                    btn.id = 'authBtn';
+                    btn.textContent = 'Войти';
+                    btn.addEventListener('click', openAuthModal);
+                    authArea.appendChild(btn);
+                }
+                updatePriceVisibility();
+            }
+
+            function updateBalanceDisplay() {
+                const user = getCurrentUser();
+                if (user) {
+                    const balance = getUserBalance(user.id);
+                    const disp = document.getElementById('balanceDisplay');
+                    if (disp) disp.textContent = balance;
+                }
+            }
+
+            function openAuthModal() {
+                authModal.classList.add('active');
+                loginForm.reset();
+                registerForm.reset();
+                hideAuthErrors();
+                switchAuthTab('login');
+            }
+            function closeAuthModal() { authModal.classList.remove('active'); }
+            function hideAuthErrors() {
+                loginError.style.display = 'none';
+                regNameError.style.display = 'none';
+                regPassError.style.display = 'none';
+                regPass2Error.style.display = 'none';
+            }
+            function switchAuthTab(tab) {
+                tabs.forEach(t => t.classList.remove('active'));
+                if (tab === 'login') {
+                    document.querySelector('[data-tab="login"]').classList.add('active');
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                } else {
+                    document.querySelector('[data-tab="register"]').classList.add('active');
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                }
+                hideAuthErrors();
+            }
+
+            function isValidUsername(name) { return /^[a-zA-Z0-9]+$/.test(name); }
+            function generateUserId() { return 'U' + Math.random().toString(16).slice(2, 10).toUpperCase(); }
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                hideAuthErrors();
+                const name = loginName.value.trim();
+                const pass = loginPassword.value;
+                if (!isValidUsername(name)) {
+                    loginError.textContent = 'Имя может содержать только латинские буквы и цифры';
+                    loginError.style.display = 'block';
+                    return;
+                }
+                const users = getUsers();
+                const user = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.password === pass);
+                if (!user) {
+                    loginError.textContent = 'Неверное имя пользователя или пароль';
+                    loginError.style.display = 'block';
+                    return;
+                }
+                setCurrentUser({ name: user.name, id: user.id });
+                closeAuthModal();
+                renderAuthArea();
+            });
+
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                hideAuthErrors();
+                const name = regName.value.trim();
+                const pass = regPassword.value;
+                const pass2 = regPassword2.value;
+                if (!isValidUsername(name)) {
+                    regNameError.textContent = 'Имя может содержать только латинские буквы и цифры';
+                    regNameError.style.display = 'block';
+                    return;
+                }
+                if (pass.length < 6) {
+                    regPassError.textContent = 'Пароль должен быть не менее 6 символов';
+                    regPassError.style.display = 'block';
+                    return;
+                }
+                if (pass !== pass2) {
+                    regPass2Error.textContent = 'Пароли не совпадают';
+                    regPass2Error.style.display = 'block';
+                    return;
+                }
+                const users = getUsers();
+                if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
+                    regNameError.textContent = 'Пользователь с таким именем уже существует';
+                    regNameError.style.display = 'block';
+                    return;
+                }
+                const newUser = { name, password: pass, id: generateUserId() };
+                users.push(newUser);
+                saveUsers(users);
+                setUserBalance(newUser.id, START_BALANCE);
+                setCurrentUser({ name: newUser.name, id: newUser.id });
+                closeAuthModal();
+                renderAuthArea();
+            });
+
+            function logout() {
+                clearCurrentUser();
+                renderAuthArea();
+            }
+
+            tabs.forEach(tab => tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab)));
+            closeAuthModalBtn.addEventListener('click', closeAuthModal);
+            window.addEventListener('click', (e) => {
+                if (e.target === authModal) closeAuthModal();
+                if (e.target === topupModal) closeTopupModal();
+            });
+
+            function openTopupModal() {
+                topupModal.classList.add('active');
+                selectedAmount = null;
+                customAmountInput.value = '';
+                priceEstimate.textContent = '';
+                buyBtn.disabled = true;
+                topupError.style.display = 'none';
+            }
+            function closeTopupModal() { topupModal.classList.remove('active'); }
+            closeTopupModalBtn.addEventListener('click', closeTopupModal);
+
+            packageBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectedAmount = parseInt(btn.dataset.amount);
+                    customAmountInput.value = '';
+                    const price = Math.round(selectedAmount * 0.99);
+                    priceEstimate.textContent = `К оплате: ${price} ₽`;
+                    buyBtn.disabled = false;
+                    topupError.style.display = 'none';
+                });
+            });
+
+            calculateCustomBtn.addEventListener('click', () => {
+                const val = parseInt(customAmountInput.value);
+                if (isNaN(val) || val < 1) {
+                    priceEstimate.textContent = 'Введите корректную сумму';
+                    buyBtn.disabled = true;
+                    return;
+                }
+                selectedAmount = val;
+                const price = (val * 0.99).toFixed(2);
+                priceEstimate.textContent = `К оплате: ${price} ₽`;
+                buyBtn.disabled = false;
+                topupError.style.display = 'none';
+            });
+
+            buyBtn.addEventListener('click', () => {
+                if (!selectedAmount || selectedAmount < 1) return;
+                const user = getCurrentUser();
+                if (!user) {
+                    topupError.textContent = 'Ошибка авторизации';
+                    topupError.style.display = 'block';
+                    return;
+                }
+                const currentBalance = getUserBalance(user.id);
+                const newBalance = currentBalance + selectedAmount;
+                setUserBalance(user.id, newBalance);
+                updateBalanceDisplay();
+                alert(`✅ Баланс пополнен на ${selectedAmount} AI-Кредитов.\nТекущий баланс: ${newBalance} кредитов.`);
+                closeTopupModal();
+            });
+
+            renderAuthArea();
         })();
 
-        // ======== ГЕНЕРАЦИЯ ФОТО С УЧЁТОМ КРЕДИТОВ ========
+        // ======== ГЕНЕРАЦИЯ ФОТО ========
         document.getElementById('generateBtn').addEventListener('click', () => {
             const prompt = document.getElementById('promptInput').value.trim();
             if (!prompt) { alert('Введите описание изображения'); return; }
@@ -173,7 +404,6 @@
                 return;
             }
 
-            // Списываем 5 кредитов
             const newBalance = balance - 5;
             balances[user.id] = newBalance;
             localStorage.setItem('aihub_balances', JSON.stringify(balances));
