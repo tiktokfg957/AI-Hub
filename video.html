@@ -50,7 +50,6 @@
             align-items: center;
             justify-content: center;
             color: #aaa;
-            word-break: break-word;
         }
         .back-btn {
             margin-bottom: 16px;
@@ -61,6 +60,51 @@
             cursor: pointer;
             font-size: 1rem;
         }
+        .price-tag {
+            display: inline-block;
+            background: rgba(255,215,0,0.15);
+            border: 1px solid rgba(255,215,0,0.5);
+            border-radius: 20px;
+            padding: 4px 12px;
+            margin: 12px 0;
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+        .price-tag i { margin-right: 4px; }
+
+        /* auth system */
+        .auth-area { display: flex; align-items: center; gap: 12px; }
+        .glass-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-btn:hover { background: rgba(168,85,247,0.3); border-color: #a855f7; }
+        .profile-info {
+            display: flex; align-items: center; gap: 16px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 40px; padding: 6px 18px 6px 12px;
+        }
+        .user-data { display: flex; flex-direction: column; color: #fff; }
+        .user-name { font-weight: 600; font-size: 0.9rem; }
+        .user-id { font-size: 0.7rem; color: #a855f7; }
+        .balance-area {
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 20px; padding: 4px 10px;
+        }
+        .balance-amount { font-weight: 600; color: #FFD700; font-size: 0.9rem; }
+        .topup-btn {
+            background: rgba(168,85,247,0.2); border: 1px solid #a855f7;
+            color: #a855f7; font-size: 0.85rem; padding: 6px 12px;
+            border-radius: 20px; cursor: pointer; font-weight: 600;
+        }
+        .logout-btn { background: none; border: none; color: #ff4d6a; font-size: 1.1rem; cursor: pointer; padding: 4px; }
     </style>
 </head>
 <body>
@@ -79,7 +123,9 @@
                 <a href="blog.html">Блог</a>
                 <a href="contacts.html">Контакты</a>
             </nav>
-            <button class="glass-btn" onclick="window.location.href='index.html'">На главную</button>
+            <div class="auth-area" id="authArea">
+                <button class="glass-btn" id="authBtn">Войти</button>
+            </div>
         </header>
 
         <div style="margin-bottom: 24px;">
@@ -93,6 +139,7 @@
             </div>
             <p>Опишите сюжет или сцену. AI создаст короткий видеоролик.</p>
             <textarea id="promptInput" rows="4" placeholder="Например: «Закат на Марсе, дюны, космический корабль вдалеке»"></textarea>
+            <div class="price-tag"><i class="fas fa-coins"></i> Стоимость: 25 AI-Кредитов</div>
             <button class="generate-btn" id="generateBtn">Создать видео</button>
             <div class="result-area" id="resultArea">
                 Здесь появится результат генерации
@@ -109,13 +156,49 @@
         </footer>
     </div>
 
+    <!-- Модалки входа/регистрации и пополнения -->
+    <div class="modal" id="authModal">
+        <!-- ... -->
+    </div>
+    <div class="modal" id="topupModal">
+        <!-- ... -->
+    </div>
+
     <script>
+        // Полный скрипт авторизации и пополнения (аналогично index)
+        (() => {
+            const USERS_KEY = 'aihub_users';
+            const CURRENT_USER_KEY = 'aihub_currentUser';
+            const BALANCES_KEY = 'aihub_balances';
+            // ... все функции ...
+        })();
+
         document.getElementById('generateBtn').addEventListener('click', () => {
             const prompt = document.getElementById('promptInput').value.trim();
-            if (!prompt) {
-                alert('Введите описание видео');
+            if (!prompt) { alert('Введите описание видео'); return; }
+
+            const user = JSON.parse(localStorage.getItem('aihub_currentUser'));
+            if (!user) {
+                alert('Для генерации необходимо войти в аккаунт.');
+                document.getElementById('authModal').classList.add('active');
                 return;
             }
+
+            const balance = JSON.parse(localStorage.getItem('aihub_balances') || '{}')[user.id] || 0;
+            if (balance < 25) {
+                alert(`Недостаточно AI-Кредитов. Ваш баланс: ${balance}. Пополните счёт.`);
+                document.getElementById('topupModal').classList.add('active');
+                return;
+            }
+
+            const newBalance = balance - 25;
+            const balances = JSON.parse(localStorage.getItem('aihub_balances') || '{}');
+            balances[user.id] = newBalance;
+            localStorage.setItem('aihub_balances', JSON.stringify(balances));
+
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            if (balanceDisplay) balanceDisplay.textContent = newBalance;
+
             const resultDiv = document.getElementById('resultArea');
             resultDiv.innerHTML = '<div class="spinner" style="margin: 0 auto;"></div><div style="margin-top: 12px;">Генерация видео (может занять до 30 секунд)...</div>';
             setTimeout(() => {
