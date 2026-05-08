@@ -2,40 +2,244 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-Hub | Главная</title>
-    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Делаем все карточки кликабельными ссылками */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at 20% 30%, #0a0a1a, #020208);
+            color: #eef2ff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+
+        /* Шапка */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            margin-bottom: 48px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logo-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 0 8px #a855f7);
+        }
+        nav {
+            display: flex;
+            gap: 32px;
+        }
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        nav a:hover, nav a.active {
+            color: #a855f7;
+        }
+        .glass-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Герой */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #c084fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 16px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+
+        /* Карточки – кликабельные ссылки */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
         .card-link {
             display: block;
             text-decoration: none;
-            color: inherit;
+            flex: 1;
+            min-width: 280px;
+            max-width: 380px;
         }
-        .card-link .glass-card {
-            transition: 0.3s;
+        .glass-card {
+            background: rgba(20,20,40,0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(168,85,247,0.3);
+            padding: 28px 24px 32px;
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer;
         }
         .card-link:hover .glass-card {
             transform: translateY(-8px);
             border-color: #a855f7;
             box-shadow: 0 20px 40px rgba(168,85,247,0.2);
         }
-        /* Фикс для кнопок внутри карточек (чтобы они не перехватывали клик) */
-        .card-link button {
-            pointer-events: none;
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
         }
-        /* Увеличение иконок в карточках */
         .card-icon {
-            font-size: 2.2rem !important;
+            font-size: 2.5rem;
+            color: #a855f7;
+        }
+        .card-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+        .chat-preview, .photo-preview, .video-preview {
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 16px;
+            margin: 16px 0;
+            min-height: 140px;
+        }
+        .message-bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            font-size: 0.85rem;
+        }
+        .message-bubble.user {
+            background: rgba(168,85,247,0.3);
+            border: 1px solid rgba(168,85,247,0.5);
+            margin-left: auto;
+            text-align: right;
+        }
+        .message-bubble.ai {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .pixel-canvas {
+            width: 100%;
+            height: 100px;
+            background: repeating-linear-gradient(0deg, rgba(168,85,247,0.1) 0px, rgba(168,85,247,0.1) 4px, transparent 4px, transparent 8px),
+                        repeating-linear-gradient(90deg, rgba(168,85,247,0.1) 0px, rgba(168,85,247,0.1) 4px, transparent 4px, transparent 8px);
+            animation: pixelShift 3s linear infinite;
+        }
+        @keyframes pixelShift {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
+        }
+        .film-strip {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            animation: slideStrip 4s linear infinite;
+        }
+        .frame {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e1a3a, #0e0a1a);
+            border: 1px solid #a855f7;
+            border-radius: 8px;
+        }
+        @keyframes slideStrip {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-200px); }
+        }
+        .data-stream {
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #a855f7, #ec4899, transparent);
+            animation: streamFlow 1.5s linear infinite;
+        }
+        @keyframes streamFlow {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .card-btn {
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: 0.2s;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 24px 0;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .social-links a {
+            color: #aaa;
+            margin-left: 20px;
+            font-size: 1.2rem;
+        }
+        .social-links a:hover {
+            color: #a855f7;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 16px; }
+            .hero h1 { font-size: 2rem; }
+            .cards-container { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
 <body>
-    <div class="noise"></div>
-    <div class="glow-orb"></div>
-
     <div class="container">
         <header>
             <div class="logo">
@@ -58,10 +262,9 @@
             </div>
 
             <div class="cards-container">
-                <!-- Карточка AI Чат -->
+                <!-- AI Чат -->
                 <a href="chat.html" class="card-link">
-                    <div class="glass-card" data-card="chat">
-                        <div class="card-glow"></div>
+                    <div class="glass-card">
                         <div class="card-header">
                             <div class="card-icon"><i class="fas fa-brain"></i></div>
                             <h2>AI Чат</h2>
@@ -69,36 +272,28 @@
                         <div class="chat-preview">
                             <div class="message-bubble user">Напиши стих про технологии</div>
                             <div class="message-bubble ai">Сеть сплетает провода,<br>В ней пульс идей, как ток, течёт...</div>
-                            <div class="typing-indicator">
-                                <span></span><span></span><span></span>
-                            </div>
                         </div>
                         <button class="card-btn">Начать диалог</button>
                     </div>
                 </a>
 
-                <!-- Карточка AI Фото -->
+                <!-- AI Фото -->
                 <a href="photo.html" class="card-link">
-                    <div class="glass-card" data-card="photo">
-                        <div class="card-glow"></div>
+                    <div class="glass-card">
                         <div class="card-header">
                             <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
                             <h2>AI Фото</h2>
                         </div>
                         <div class="photo-preview">
-                            <div class="pixel-canvas">
-                                <div class="pixel-grid"></div>
-                                <div class="overlay-text">Опишите изображение</div>
-                            </div>
+                            <div class="pixel-canvas"></div>
                         </div>
-                        <button class="card-btn">Создать</button>
+                        <button class="card-btn">Создать изображение</button>
                     </div>
                 </a>
 
-                <!-- Карточка AI Видео -->
+                <!-- AI Видео -->
                 <a href="video.html" class="card-link">
-                    <div class="glass-card" data-card="video">
-                        <div class="card-glow"></div>
+                    <div class="glass-card">
                         <div class="card-header">
                             <div class="card-icon"><i class="fas fa-film"></i></div>
                             <h2>AI Видео</h2>
@@ -111,7 +306,7 @@
                             </div>
                             <div class="data-stream"></div>
                         </div>
-                        <button class="card-btn">Сгенерировать</button>
+                        <button class="card-btn">Сгенерировать видео</button>
                     </div>
                 </a>
             </div>
@@ -126,7 +321,5 @@
             </div>
         </footer>
     </div>
-
-    <!-- Нет сложных скриптов, только демо-заглушки не нужны, т.к. переход на отдельные страницы -->
 </body>
 </html>
