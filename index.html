@@ -2,16 +2,26 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>AI-Hub | Искусственный интеллект</title>
     <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Небольшой фикс для ссылки-кнопки */
-        .card-link {
+        /* Делаем карточку чата кликабельной ссылкой */
+        .chat-card-link {
             display: block;
             text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        .chat-card-link .glass-card {
+            transition: 0.3s;
+        }
+        .chat-card-link:hover .glass-card {
+            transform: translateY(-8px);
+            border-color: #a855f7;
+            box-shadow: 0 20px 40px rgba(168,85,247,0.2);
         }
     </style>
 </head>
@@ -41,26 +51,27 @@
             </div>
 
             <div class="cards-container">
-                <!-- Карточка AI Чат - ИСПРАВЛЕНА -->
-                <div class="glass-card" data-card="chat">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-brain"></i></div>
-                        <h2>AI Чат</h2>
-                    </div>
-                    <div class="chat-preview">
-                        <div class="message-bubble user">Напиши стих про технологии</div>
-                        <div class="message-bubble ai">Сеть сплетает провода,<br>В ней пульс идей, как ток, течёт...</div>
-                        <div class="typing-indicator">
-                            <span></span><span></span><span></span>
+                <!-- Карточка AI Чат – ВСЯ карточка кликабельна -->
+                <a href="chat.html" class="chat-card-link">
+                    <div class="glass-card" data-card="chat">
+                        <div class="card-glow"></div>
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fas fa-brain"></i></div>
+                            <h2>AI Чат</h2>
                         </div>
+                        <div class="chat-preview">
+                            <div class="message-bubble user">Напиши стих про технологии</div>
+                            <div class="message-bubble ai">Сеть сплетает провода,<br>В ней пульс идей, как ток, течёт...</div>
+                            <div class="typing-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <!-- Кнопка остаётся для красоты, но теперь необязательна -->
+                        <button class="card-btn" style="pointer-events: none;">Начать диалог</button>
                     </div>
-                    <a href="chat.html" class="card-link">
-                        <button class="card-btn">Начать диалог</button>
-                    </a>
-                </div>
+                </a>
 
-                <!-- Карточка AI Фото -->
+                <!-- Карточка AI Фото (без изменений) -->
                 <div class="glass-card" data-card="photo">
                     <div class="card-glow"></div>
                     <div class="card-header">
@@ -76,7 +87,7 @@
                     <button class="card-btn" id="photoBtn">Создать изображение</button>
                 </div>
 
-                <!-- Карточка AI Видео -->
+                <!-- Карточка AI Видео (без изменений) -->
                 <div class="glass-card" data-card="video">
                     <div class="card-glow"></div>
                     <div class="card-header">
@@ -106,9 +117,8 @@
         </footer>
     </div>
 
-    <!-- НЕТ ПОДКЛЮЧЕНИЯ main.js – только простой скрипт для остальных кнопок -->
     <script>
-        // Простые обработчики для демо-кнопок
+        // Обработчики для остальных кнопок
         document.getElementById('photoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
         document.getElementById('videoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
     </script>
