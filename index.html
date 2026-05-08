@@ -99,17 +99,31 @@
 
     <script src="js/main.js"></script>
     <script>
-        // Надёжная обработка кнопки чата
-        const chatBtn = document.getElementById('chatBtn');
-        if (chatBtn) {
-            chatBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'chat.html';
-            });
-        }
-        // Остальные кнопки – демо
-        document.getElementById('photoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
-        document.getElementById('videoBtn')?.addEventListener('click', () => alert('Демо-режим. Функционал будет доступен в следующей версии.'));
+        (function() {
+            // Принудительная обработка кнопки чата
+            var chatButton = document.getElementById('chatBtn');
+            if (chatButton) {
+                chatButton.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.location.assign('chat.html');
+                    return false;
+                };
+            }
+            // Остальные кнопки
+            var photoButton = document.getElementById('photoBtn');
+            if (photoButton) {
+                photoButton.onclick = function() {
+                    alert('Демо-режим. Функционал будет доступен в следующей версии.');
+                };
+            }
+            var videoButton = document.getElementById('videoBtn');
+            if (videoButton) {
+                videoButton.onclick = function() {
+                    alert('Демо-режим. Функционал будет доступен в следующей версии.');
+                };
+            }
+        })();
     </script>
 </body>
 </html>
