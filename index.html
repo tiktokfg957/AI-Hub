@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AI-Hub | Искусственный интеллект нового поколения</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="glow-orb"></div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">✨</div>
+                <span>AI-Hub</span>
+            </div>
+            <nav>
+                <a href="#" class="active">Главная</a>
+                <a href="#">О нас</a>
+                <a href="#">Блог</a>
+                <a href="#">Контакты</a>
+            </nav>
+            <button class="glass-btn">Войти</button>
+        </header>
+
+        <main>
+            <div class="hero">
+                <h1>Искусственный интеллект<br>на грани реальности</h1>
+                <p>Генерация текста, изображений и видео — всё в одном футуристичном интерфейсе</p>
+            </div>
+
+            <div class="cards-container">
+                <!-- Карточка AI Чат -->
+                <div class="glass-card" data-card="chat">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <h2>AI Чат</h2>
+                    </div>
+                    <div class="chat-preview">
+                        <div class="message-bubble user">Напиши стих про технологии</div>
+                        <div class="message-bubble ai">Сеть сплетает провода,<br>В ней пульс идей, как ток, течёт...</div>
+                        <div class="typing-indicator">
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                    <button class="card-btn">Начать диалог</button>
+                </div>
+
+                <!-- Карточка AI Фото -->
+                <div class="glass-card" data-card="photo">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-camera-retro"></i></div>
+                        <h2>AI Фото</h2>
+                    </div>
+                    <div class="photo-preview">
+                        <div class="pixel-canvas" id="pixelCanvas">
+                            <div class="pixel-grid"></div>
+                            <div class="overlay-text">Генерация...</div>
+                        </div>
+                    </div>
+                    <button class="card-btn">Создать изображение</button>
+                </div>
+
+                <!-- Карточка AI Видео -->
+                <div class="glass-card" data-card="video">
+                    <div class="card-glow"></div>
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-film"></i></div>
+                        <h2>AI Видео</h2>
+                    </div>
+                    <div class="video-preview">
+                        <div class="film-strip">
+                            <div class="frame"></div>
+                            <div class="frame"></div>
+                            <div class="frame"></div>
+                        </div>
+                        <div class="data-stream"></div>
+                    </div>
+                    <button class="card-btn">Сгенерировать видео</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2026 AI-Hub. Все права защищены.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
