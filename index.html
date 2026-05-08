@@ -48,7 +48,7 @@
                             <span></span><span></span><span></span>
                         </div>
                     </div>
-                    <button class="card-btn" id="chatBtn">Начать диалог</button>
+                    <button class="card-btn" onclick="window.location.href='chat.html'; return false;">Начать диалог</button>
                 </div>
 
                 <!-- Карточка AI Фото -->
@@ -64,7 +64,7 @@
                             <div class="overlay-text">Генерация...</div>
                         </div>
                     </div>
-                    <button class="card-btn" id="photoBtn">Создать изображение</button>
+                    <button class="card-btn" onclick="alert('Демо-режим. Функционал будет доступен в следующей версии.'); return false;">Создать изображение</button>
                 </div>
 
                 <!-- Карточка AI Видео -->
@@ -82,7 +82,7 @@
                         </div>
                         <div class="data-stream"></div>
                     </div>
-                    <button class="card-btn" id="videoBtn">Сгенерировать видео</button>
+                    <button class="card-btn" onclick="alert('Демо-режим. Функционал будет доступен в следующей версии.'); return false;">Сгенерировать видео</button>
                 </div>
             </div>
         </main>
@@ -98,32 +98,5 @@
     </div>
 
     <script src="js/main.js"></script>
-    <script>
-        (function() {
-            // Принудительная обработка кнопки чата
-            var chatButton = document.getElementById('chatBtn');
-            if (chatButton) {
-                chatButton.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.location.assign('chat.html');
-                    return false;
-                };
-            }
-            // Остальные кнопки
-            var photoButton = document.getElementById('photoBtn');
-            if (photoButton) {
-                photoButton.onclick = function() {
-                    alert('Демо-режим. Функционал будет доступен в следующей версии.');
-                };
-            }
-            var videoButton = document.getElementById('videoBtn');
-            if (videoButton) {
-                videoButton.onclick = function() {
-                    alert('Демо-режим. Функционал будет доступен в следующей версии.');
-                };
-            }
-        })();
-    </script>
 </body>
 </html>
