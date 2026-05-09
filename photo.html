@@ -9,60 +9,241 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .generator-container {
-            max-width: 700px; margin: 40px auto; background: rgba(20,20,40,0.5);
-            backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(168,85,247,0.3);
-            padding: 32px; text-align: center;
+            max-width: 700px;
+            margin: 40px auto;
+            background: rgba(20,20,40,0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(168,85,247,0.3);
+            padding: 32px;
+            text-align: center;
         }
         textarea {
-            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(168,85,247,0.5);
-            border-radius: 24px; padding: 16px; color: white; font-size: 1rem; resize: vertical; margin: 20px 0;
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(168,85,247,0.5);
+            border-radius: 24px;
+            padding: 16px;
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            margin: 20px 0;
         }
         .generate-btn {
-            background: linear-gradient(90deg, #a855f7, #ec4899); border: none; padding: 12px 32px;
-            border-radius: 40px; font-weight: 600; cursor: pointer; color: white;
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            border: none;
+            padding: 12px 32px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
         }
         .result-area {
-            margin-top: 30px; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 24px;
-            min-height: 200px; display: flex; align-items: center; justify-content: center; color: #aaa;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 24px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
         }
-        .back-btn { margin-bottom: 16px; display: inline-block; background: none; border: none; color: #a855f7; cursor: pointer; font-size: 1rem; }
+        .back-btn {
+            margin-bottom: 16px;
+            display: inline-block;
+            background: none;
+            border: none;
+            color: #a855f7;
+            cursor: pointer;
+            font-size: 1rem;
+        }
         .price-tag {
-            display: inline-block; background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.5);
-            border-radius: 20px; padding: 4px 12px; margin: 12px 0; color: #FFD700; font-size: 0.9rem;
+            display: inline-block;
+            background: rgba(255,215,0,0.15);
+            border: 1px solid rgba(255,215,0,0.5);
+            border-radius: 20px;
+            padding: 4px 12px;
+            margin: 12px 0;
+            color: #FFD700;
+            font-size: 0.9rem;
         }
         .price-tag i { margin-right: 4px; }
 
-        /* auth styles */
+        /* === БЛОК АВТОРИЗАЦИИ === */
         .auth-area { display: flex; align-items: center; gap: 12px; }
-        .glass-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 10px 24px; border-radius: 40px; color: white; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif; }
-        .glass-btn:hover { background: rgba(168,85,247,0.3); border-color: #a855f7; }
-        .profile-info { display: flex; align-items: center; gap: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(168,85,247,0.4); border-radius: 40px; padding: 6px 18px 6px 12px; }
+        .glass-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-btn:hover {
+            background: rgba(168,85,247,0.3);
+            border-color: #a855f7;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 40px;
+            padding: 6px 18px 6px 12px;
+        }
         .user-data { display: flex; flex-direction: column; color: #fff; }
-        .user-name { font-weight: 600; font-size: 0.9rem; }
-        .user-id { font-size: 0.7rem; color: #a855f7; }
-        .balance-area { display: flex; align-items: center; gap: 6px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.4); border-radius: 20px; padding: 4px 10px; }
+        .user-name { font-weight: 600; font-size: 0.9rem; line-height: 1.2; }
+        .user-id { font-size: 0.7rem; color: #a855f7; letter-spacing: 0.5px; }
+        .balance-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.4);
+            border-radius: 20px;
+            padding: 4px 10px;
+        }
         .balance-area .coin-icon { color: #FFD700; font-size: 1rem; }
         .balance-amount { font-weight: 600; color: #FFD700; font-size: 0.9rem; }
-        .topup-btn { background: rgba(168,85,247,0.2); border: 1px solid #a855f7; color: #a855f7; font-size: 0.85rem; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-weight: 600; }
-        .logout-btn { background: none; border: none; color: #ff4d6a; font-size: 1.1rem; cursor: pointer; padding: 4px; }
+        .topup-btn {
+            background: rgba(168,85,247,0.2);
+            border: 1px solid #a855f7;
+            color: #a855f7;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .topup-btn:hover { background: rgba(168,85,247,0.4); }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: #ff4d6a;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 4px;
+        }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); justify-content: center; align-items: center; z-index: 1000; }
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
         .modal.active { display: flex; }
-        .modal-content { background: rgba(20,20,40,0.95); backdrop-filter: blur(12px); border: 1px solid rgba(168,85,247,0.4); border-radius: 32px; padding: 32px; max-width: 400px; width: 90%; position: relative; animation: modalIn 0.3s ease; }
-        @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; color: #aaa; font-size: 1.5rem; cursor: pointer; }
-        .modal-tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .modal-tab { flex: 1; text-align: center; padding: 12px; cursor: pointer; font-weight: 500; color: #aaa; transition: 0.2s; border-bottom: 2px solid transparent; }
-        .modal-tab.active { color: #a855f7; border-bottom-color: #a855f7; }
+        .modal-content {
+            background: rgba(20,20,40,0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 32px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .modal-tabs {
+            display: flex;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #aaa;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .modal-tab.active {
+            color: #a855f7;
+            border-bottom-color: #a855f7;
+        }
         .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; margin-bottom: 6px; font-size: 0.85rem; color: #ccc; }
-        .form-group input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(168,85,247,0.5); border-radius: 12px; padding: 12px; color: white; font-family: 'Inter', sans-serif; }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+        .form-group input {
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(168,85,247,0.5);
+            border-radius: 12px;
+            padding: 12px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
         .form-group input:focus { outline: none; border-color: #a855f7; }
-        .error-msg { color: #ff6b7a; font-size: 0.8rem; margin-top: 4px; display: none; }
-        .submit-btn { background: linear-gradient(90deg, #a855f7, #ec4899); border: none; width: 100%; padding: 12px; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; margin-top: 8px; font-family: 'Inter', sans-serif; }
-        .package-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .package-btn { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.4); border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; color: #fff; }
-        .package-btn:hover { background: rgba(168,85,247,0.3); border-color: #a855f7; }
+        .error-msg {
+            color: #ff6b7a;
+            font-size: 0.8rem;
+            margin-top: 4px;
+            display: none;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #a855f7, #ec4899);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            margin-top: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+        .package-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .package-btn {
+            background: rgba(168,85,247,0.1);
+            border: 1px solid rgba(168,85,247,0.4);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #fff;
+        }
+        .package-btn:hover {
+            background: rgba(168,85,247,0.3);
+            border-color: #a855f7;
+        }
         .package-amount { font-size: 1.2rem; font-weight: 700; color: #FFD700; }
         .package-price { font-size: 0.85rem; color: #aaa; }
         .custom-amount { display: flex; gap: 10px; align-items: center; }
@@ -119,12 +300,67 @@
         </footer>
     </div>
 
-    <!-- Модалки -->
+    <!-- Модальное окно входа/регистрации -->
     <div class="modal" id="authModal">
-        <!-- ... (та же форма, что и в index) ... -->
+        <div class="modal-content">
+            <button class="modal-close" id="closeAuthModal">&times;</button>
+            <div class="modal-tabs">
+                <div class="modal-tab active" data-tab="login">Вход</div>
+                <div class="modal-tab" data-tab="register">Регистрация</div>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Имя пользователя (латиница)</label>
+                    <input type="text" id="loginName" placeholder="username" required>
+                    <div class="error-msg" id="loginError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="Пароль" required>
+                </div>
+                <button type="submit" class="submit-btn">Войти</button>
+            </form>
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>Имя пользователя (латиница)</label>
+                    <input type="text" id="regName" placeholder="username" required>
+                    <div class="error-msg" id="regNameError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Пароль (минимум 6 символов)</label>
+                    <input type="password" id="regPassword" placeholder="Пароль" required>
+                    <div class="error-msg" id="regPassError"></div>
+                </div>
+                <div class="form-group">
+                    <label>Повторите пароль</label>
+                    <input type="password" id="regPassword2" placeholder="Пароль ещё раз" required>
+                    <div class="error-msg" id="regPass2Error"></div>
+                </div>
+                <button type="submit" class="submit-btn">Зарегистрироваться</button>
+            </form>
+        </div>
     </div>
+
+    <!-- Модальное окно пополнения -->
     <div class="modal" id="topupModal">
-        <!-- ... (та же форма пополнения) ... -->
+        <div class="modal-content" style="max-width: 420px;">
+            <button class="modal-close" id="closeTopupModal">&times;</button>
+            <h3 style="margin-bottom: 16px; font-weight: 600;">Пополнение AI-Кредитов</h3>
+            <div class="package-grid">
+                <div class="package-btn" data-amount="100">100<br><span class="package-price">99 ₽</span></div>
+                <div class="package-btn" data-amount="500">500<br><span class="package-price">449 ₽</span></div>
+                <div class="package-btn" data-amount="1000">1 000<br><span class="package-price">849 ₽</span></div>
+                <div class="package-btn" data-amount="5000">5 000<br><span class="package-price">3 999 ₽</span></div>
+                <div class="package-btn" data-amount="10000">10 000<br><span class="package-price">7 499 ₽</span></div>
+            </div>
+            <div class="custom-amount">
+                <input type="number" id="customAmount" placeholder="Введите сумму кредитов" min="1">
+                <button class="submit-btn" id="calculateCustomBtn" style="width: auto; margin: 0;">Рассчитать</button>
+            </div>
+            <div class="price-estimate" id="priceEstimate"></div>
+            <button class="submit-btn" id="buyBtn" disabled>Купить</button>
+            <p class="error-msg" id="topupError" style="margin-top: 8px;"></p>
+        </div>
     </div>
 
     <script>
@@ -178,7 +414,6 @@
 
             let selectedAmount = null;
 
-            // Функция показа/скрытия цен
             function updatePriceVisibility() {
                 const priceTag = document.getElementById('photoPriceTag');
                 if (priceTag) {
