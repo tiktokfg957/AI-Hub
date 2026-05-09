@@ -32,7 +32,6 @@
         .admin-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 1.1rem; cursor: pointer; padding: 4px 8px; border-radius: 50%; transition: 0.2s; margin-right: -6px; }
         .admin-btn:hover { background: rgba(168,85,247,0.3); border-color: #a855f7; }
 
-        /* Остальные стили (герой, карточки, модалки) без изменений */
         .hero { text-align: center; margin-bottom: 80px; }
         .hero h1 { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, #fff, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; margin-bottom: 16px; }
         .hero p { font-size: 1.2rem; color: #aaa; }
@@ -58,7 +57,6 @@
         @keyframes streamFlow { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
         .card-btn { background: linear-gradient(90deg, #a855f7, #ec4899); border: none; width: 100%; padding: 12px; border-radius: 40px; font-weight: 600; color: white; cursor: pointer; margin-top: 16px; transition: 0.2s; font-family: 'Inter', sans-serif; }
 
-        /* Модалки */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
         .modal-content { background: rgba(20,20,40,0.95); backdrop-filter: blur(12px); border: 1px solid rgba(168,85,247,0.4); border-radius: 32px; padding: 32px; max-width: 400px; width: 90%; position: relative; animation: modalIn 0.3s ease; }
@@ -81,6 +79,10 @@
         .custom-amount { display: flex; gap: 10px; align-items: center; }
         .custom-amount input { flex: 1; }
         .price-estimate { margin: 8px 0; font-size: 0.9rem; color: #FFD700; }
+
+        .admin-actions { display: flex; gap: 10px; }
+        .admin-actions .submit-btn { flex: 1; }
+        .danger-btn { background: linear-gradient(90deg, #ff4d6a, #ff6b7a); }
 
         footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding: 24px 0; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem; color: #888; }
         .social-links a { color: #aaa; margin-left: 20px; font-size: 1.2rem; }
@@ -244,9 +246,12 @@
             </div>
             <div class="form-group">
                 <label>Количество кредитов</label>
-                <input type="number" id="adminCreditAmount" placeholder="Сумма для добавления" min="1">
+                <input type="number" id="adminCreditAmount" placeholder="Сумма" min="1">
             </div>
-            <button class="submit-btn" id="adminAddCreditsBtn">Добавить кредиты</button>
+            <div class="admin-actions">
+                <button class="submit-btn" id="adminAddCreditsBtn">Добавить</button>
+                <button class="submit-btn danger-btn" id="adminSubtractCreditsBtn">Списать</button>
+            </div>
             <p class="error-msg" id="adminError" style="margin-top: 8px;"></p>
         </div>
     </div>
@@ -302,6 +307,7 @@
             const adminCreditAmount = document.getElementById('adminCreditAmount');
             const adminCheckBalanceBtn = document.getElementById('adminCheckBalanceBtn');
             const adminAddCreditsBtn = document.getElementById('adminAddCreditsBtn');
+            const adminSubtractCreditsBtn = document.getElementById('adminSubtractCreditsBtn');
             const adminBalanceDisplay = document.getElementById('adminBalanceDisplay');
             const adminError = document.getElementById('adminError');
 
@@ -316,10 +322,7 @@
                     const balance = isAdmin ? '—' : getUserBalance(user.id);
                     const profileDiv = document.createElement('div');
                     profileDiv.className = 'profile-info';
-
-                    // Кнопка настроек для админа слева
                     const adminBtnHtml = isAdmin ? `<button class="admin-btn" id="adminSettingsBtn" title="Настройки"><i class="fas fa-cog"></i></button>` : '';
-
                     profileDiv.innerHTML = `
                         ${adminBtnHtml}
                         <div class="user-data">
@@ -336,8 +339,6 @@
                         <button class="logout-btn" id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
                     `;
                     authArea.appendChild(profileDiv);
-
-                    // Вешаем обработчики
                     if (isAdmin) {
                         document.getElementById('adminSettingsBtn').addEventListener('click', openAdminModal);
                     } else {
@@ -395,21 +396,17 @@
             function isValidUsername(name) { return /^[a-zA-Z0-9]+$/.test(name); }
             function generateUserId() { return 'U' + Math.random().toString(16).slice(2, 10).toUpperCase(); }
 
-            // Вход
             loginForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 hideAuthErrors();
                 const name = loginName.value.trim();
                 const pass = loginPassword.value;
-
-                // Проверка админа
                 if (name === ADMIN_CREDENTIALS.name && pass === ADMIN_CREDENTIALS.password) {
                     setCurrentUser({ name: 'ADMIN', id: 'ADMIN', isAdmin: true });
                     closeAuthModal();
                     renderAuthArea();
                     return;
                 }
-
                 if (!isValidUsername(name)) {
                     loginError.textContent = 'Имя может содержать только латинские буквы и цифры';
                     loginError.style.display = 'block';
@@ -427,14 +424,12 @@
                 renderAuthArea();
             });
 
-            // Регистрация (с запретом ADMIN)
             registerForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 hideAuthErrors();
                 const name = regName.value.trim();
                 const pass = regPassword.value;
                 const pass2 = regPassword2.value;
-
                 if (name.toUpperCase() === 'ADMIN') {
                     regNameError.textContent = 'Имя ADMIN зарезервировано';
                     regNameError.style.display = 'block';
@@ -557,7 +552,7 @@
                 adminBalanceDisplay.textContent = `Баланс: ${balance} кредитов`;
             });
 
-            adminAddCreditsBtn.addEventListener('click', () => {
+            function handleAdminTransaction(operation) {
                 const userId = adminUserIdInput.value.trim();
                 const amount = parseInt(adminCreditAmount.value);
                 if (!userId) {
@@ -570,15 +565,29 @@
                     adminError.style.display = 'block';
                     return;
                 }
-                // Проверяем, что пользователь существует (есть в balances или admin не может добавлять несуществующим)
-                const balances = getBalances();
-                const currentBalance = balances[userId] || 0;
-                const newBalance = currentBalance + amount;
+
+                const currentBalance = getUserBalance(userId);
+                let newBalance;
+
+                if (operation === 'add') {
+                    newBalance = currentBalance + amount;
+                } else if (operation === 'subtract') {
+                    if (amount > currentBalance) {
+                        adminError.textContent = `Недостаточно кредитов. Баланс: ${currentBalance}`;
+                        adminError.style.display = 'block';
+                        return;
+                    }
+                    newBalance = currentBalance - amount;
+                }
+
                 setUserBalance(userId, newBalance);
-                adminBalanceDisplay.textContent = `Баланс: ${newBalance} кредитов (добавлено ${amount})`;
+                adminBalanceDisplay.textContent = `Баланс: ${newBalance} кредитов (${operation === 'add' ? '+' : '-'}${amount})`;
                 adminError.style.display = 'none';
                 adminCreditAmount.value = '';
-            });
+            }
+
+            adminAddCreditsBtn.addEventListener('click', () => handleAdminTransaction('add'));
+            adminSubtractCreditsBtn.addEventListener('click', () => handleAdminTransaction('subtract'));
 
             // ======== ПЕРВЫЙ РЕНДЕР ========
             renderAuthArea();
