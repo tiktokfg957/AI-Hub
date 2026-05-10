@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* auth styles (скопированы) */
+        /* auth styles */
         .auth-area { display: flex; align-items: center; gap: 12px; }
         .glass-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); padding: 10px 24px; border-radius: 40px; color: white; cursor: pointer; transition: 0.2s; font-family: 'Inter', sans-serif; }
         .glass-btn:hover { background: rgba(168,85,247,0.3); border-color: #a855f7; }
@@ -75,6 +75,7 @@
             </div>
 
             <div class="cards-container" style="justify-content: center; gap: 32px;">
+                <!-- Email -->
                 <div class="glass-card" style="max-width: 350px;">
                     <div class="card-header">
                         <div class="card-icon"><i class="fas fa-envelope"></i></div>
@@ -83,6 +84,8 @@
                     <p>support@ai-hub.com</p>
                     <p>partners@ai-hub.com</p>
                 </div>
+
+                <!-- Соцсети (только Telegram и Twitter) -->
                 <div class="glass-card" style="max-width: 350px;">
                     <div class="card-header">
                         <div class="card-icon"><i class="fas fa-comment-dots"></i></div>
@@ -90,15 +93,6 @@
                     </div>
                     <p>Telegram: @ai_hub_bot</p>
                     <p>Twitter: @ai_hub</p>
-                    <p>Discord: discord.gg/aihub</p>
-                </div>
-                <div class="glass-card" style="max-width: 350px;">
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <h2>Адрес</h2>
-                    </div>
-                    <p>г. Москва, ул. Технопарковая, 42</p>
-                    <p>Бизнес-центр "AI-Hub", офис 101</p>
                 </div>
             </div>
 
@@ -126,7 +120,7 @@
         </footer>
     </div>
 
-    <!-- Модалки -->
+    <!-- Модалки авторизации и пополнения -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <button class="modal-close" id="closeAuthModal">&times;</button>
@@ -189,7 +183,7 @@
     </div>
 
     <script>
-        // ======== АВТОРИЗАЦИЯ (полный код) ========
+        // ======== АВТОРИЗАЦИЯ ========
         (() => {
             const USERS_KEY = 'aihub_users';
             const CURRENT_USER_KEY = 'aihub_currentUser';
@@ -202,15 +196,8 @@
             const clearCurrentUser = () => localStorage.removeItem(CURRENT_USER_KEY);
             const getBalances = () => JSON.parse(localStorage.getItem(BALANCES_KEY)) || {};
             const saveBalances = (balances) => localStorage.setItem(BALANCES_KEY, JSON.stringify(balances));
-            const getUserBalance = (userId) => {
-                const b = getBalances();
-                return b[userId] || 0;
-            };
-            const setUserBalance = (userId, amount) => {
-                const b = getBalances();
-                b[userId] = amount;
-                saveBalances(b);
-            };
+            const getUserBalance = (userId) => { const b = getBalances(); return b[userId] || 0; };
+            const setUserBalance = (userId, amount) => { const b = getBalances(); b[userId] = amount; saveBalances(b); };
             const START_BALANCE = 50;
 
             const authArea = document.getElementById('authArea');
@@ -243,23 +230,32 @@
                 const user = getCurrentUser();
                 authArea.innerHTML = '';
                 if (user) {
-                    const balance = getUserBalance(user.id);
+                    const isAdmin = user.isAdmin === true;
+                    const balance = isAdmin ? '—' : getUserBalance(user.id);
                     const profileDiv = document.createElement('div');
                     profileDiv.className = 'profile-info';
+                    const adminBtnHtml = isAdmin ? `<button class="admin-btn" id="adminSettingsBtn" title="Настройки"><i class="fas fa-cog"></i></button>` : '';
                     profileDiv.innerHTML = `
+                        ${adminBtnHtml}
                         <div class="user-data">
                             <span class="user-name">${user.name}</span>
-                            <span class="user-id">ID: ${user.id}</span>
+                            <span class="user-id">ID: ${user.id}${isAdmin ? ' (админ)' : ''}</span>
                         </div>
+                        ${!isAdmin ? `
                         <div class="balance-area">
                             <i class="fas fa-coins coin-icon"></i>
                             <span class="balance-amount" id="balanceDisplay">${balance}</span>
                         </div>
                         <button class="topup-btn" id="topupBtn">+ Пополнить</button>
+                        ` : ''}
                         <button class="logout-btn" id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
                     `;
                     authArea.appendChild(profileDiv);
-                    document.getElementById('topupBtn').addEventListener('click', openTopupModal);
+                    if (isAdmin) {
+                        document.getElementById('adminSettingsBtn').addEventListener('click', () => alert('Админ-панель доступна на главной странице'));
+                    } else {
+                        document.getElementById('topupBtn').addEventListener('click', openTopupModal);
+                    }
                     document.getElementById('logoutBtn').addEventListener('click', logout);
                 } else {
                     const btn = document.createElement('button');
@@ -273,7 +269,7 @@
 
             function updateBalanceDisplay() {
                 const user = getCurrentUser();
-                if (user) {
+                if (user && !user.isAdmin) {
                     const balance = getUserBalance(user.id);
                     const disp = document.getElementById('balanceDisplay');
                     if (disp) disp.textContent = balance;
@@ -316,6 +312,13 @@
                 hideAuthErrors();
                 const name = loginName.value.trim();
                 const pass = loginPassword.value;
+                // Админ
+                if (name === 'ADMIN' && pass === '123456') {
+                    setCurrentUser({ name: 'ADMIN', id: 'ADMIN', isAdmin: true });
+                    closeAuthModal();
+                    renderAuthArea();
+                    return;
+                }
                 if (!isValidUsername(name)) {
                     loginError.textContent = 'Имя может содержать только латинские буквы и цифры';
                     loginError.style.display = 'block';
@@ -339,6 +342,11 @@
                 const name = regName.value.trim();
                 const pass = regPassword.value;
                 const pass2 = regPassword2.value;
+                if (name.toUpperCase() === 'ADMIN') {
+                    regNameError.textContent = 'Имя ADMIN зарезервировано';
+                    regNameError.style.display = 'block';
+                    return;
+                }
                 if (!isValidUsername(name)) {
                     regNameError.textContent = 'Имя может содержать только латинские буквы и цифры';
                     regNameError.style.display = 'block';
@@ -420,7 +428,7 @@
             buyBtn.addEventListener('click', () => {
                 if (!selectedAmount || selectedAmount < 1) return;
                 const user = getCurrentUser();
-                if (!user) {
+                if (!user || user.isAdmin) {
                     topupError.textContent = 'Ошибка авторизации';
                     topupError.style.display = 'block';
                     return;
