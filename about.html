@@ -21,6 +21,8 @@
         .balance-amount { font-weight: 600; color: #FFD700; font-size: 0.9rem; }
         .topup-btn { background: rgba(168,85,247,0.2); border: 1px solid #a855f7; color: #a855f7; font-size: 0.85rem; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-weight: 600; }
         .logout-btn { background: none; border: none; color: #ff4d6a; font-size: 1.1rem; cursor: pointer; padding: 4px; }
+        .admin-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: 1.1rem; cursor: pointer; padding: 4px 8px; border-radius: 50%; transition: 0.2s; margin-right: -6px; }
+        .admin-btn:hover { background: rgba(168,85,247,0.3); border-color: #a855f7; }
 
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); justify-content: center; align-items: center; z-index: 1000; }
         .modal.active { display: flex; }
@@ -44,6 +46,9 @@
         .custom-amount { display: flex; gap: 10px; align-items: center; }
         .custom-amount input { flex: 1; }
         .price-estimate { margin: 8px 0; font-size: 0.9rem; color: #FFD700; }
+        .admin-actions { display: flex; gap: 10px; }
+        .admin-actions .submit-btn { flex: 1; }
+        .danger-btn { background: linear-gradient(90deg, #ff4d6a, #ff6b7a); }
     </style>
 </head>
 <body>
@@ -107,14 +112,13 @@
         <footer>
             <p>© 2026 AI-Hub. Все права защищены.</p>
             <div class="social-links">
+                <a href="#"><i class="fab fa-telegram-plane"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-                <a href="#"><i class="fab fa-discord"></i></a>
             </div>
         </footer>
     </div>
 
-    <!-- Модалки -->
+    <!-- Модалки входа/регистрации и пополнения -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <button class="modal-close" id="closeAuthModal">&times;</button>
@@ -176,11 +180,35 @@
         </div>
     </div>
 
+    <!-- Модалка админки (скопирована из index) -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeAdminModal">&times;</button>
+            <h3 style="margin-bottom: 16px; font-weight: 600;">⚙️ Админ-панель</h3>
+            <div class="form-group">
+                <label>ID пользователя</label>
+                <input type="text" id="adminUserIdInput" placeholder="Например: U123ABC">
+                <button class="submit-btn" id="adminCheckBalanceBtn" style="margin-top: 8px;">Проверить баланс</button>
+                <div id="adminBalanceDisplay" style="margin-top: 8px; color: #FFD700; font-size: 0.9rem;"></div>
+            </div>
+            <div class="form-group">
+                <label>Количество кредитов</label>
+                <input type="number" id="adminCreditAmount" placeholder="Сумма" min="1">
+            </div>
+            <div class="admin-actions">
+                <button class="submit-btn" id="adminAddCreditsBtn">Добавить</button>
+                <button class="submit-btn danger-btn" id="adminSubtractCreditsBtn">Списать</button>
+            </div>
+            <p class="error-msg" id="adminError" style="margin-top: 8px;"></p>
+        </div>
+    </div>
+
     <script>
         (() => {
             const USERS_KEY = 'aihub_users';
             const CURRENT_USER_KEY = 'aihub_currentUser';
             const BALANCES_KEY = 'aihub_balances';
+            const ADMIN_CREDENTIALS = { name: 'ADMIN', password: '123456' };
 
             const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY)) || [];
             const saveUsers = (users) => localStorage.setItem(USERS_KEY, JSON.stringify(users));
@@ -189,15 +217,8 @@
             const clearCurrentUser = () => localStorage.removeItem(CURRENT_USER_KEY);
             const getBalances = () => JSON.parse(localStorage.getItem(BALANCES_KEY)) || {};
             const saveBalances = (balances) => localStorage.setItem(BALANCES_KEY, JSON.stringify(balances));
-            const getUserBalance = (userId) => {
-                const b = getBalances();
-                return b[userId] || 0;
-            };
-            const setUserBalance = (userId, amount) => {
-                const b = getBalances();
-                b[userId] = amount;
-                saveBalances(b);
-            };
+            const getUserBalance = (userId) => { const b = getBalances(); return b[userId] || 0; };
+            const setUserBalance = (userId, amount) => { const b = getBalances(); b[userId] = amount; saveBalances(b); };
             const START_BALANCE = 50;
 
             const authArea = document.getElementById('authArea');
@@ -205,6 +226,8 @@
             const closeAuthModalBtn = document.getElementById('closeAuthModal');
             const topupModal = document.getElementById('topupModal');
             const closeTopupModalBtn = document.getElementById('closeTopupModal');
+            const adminModal = document.getElementById('adminModal');
+            const closeAdminModalBtn = document.getElementById('closeAdminModal');
             const tabs = document.querySelectorAll('#authModal .modal-tab');
             const loginForm = document.getElementById('loginForm');
             const registerForm = document.getElementById('registerForm');
@@ -223,6 +246,13 @@
             const buyBtn = document.getElementById('buyBtn');
             const topupError = document.getElementById('topupError');
             const calculateCustomBtn = document.getElementById('calculateCustomBtn');
+            const adminUserIdInput = document.getElementById('adminUserIdInput');
+            const adminCreditAmount = document.getElementById('adminCreditAmount');
+            const adminCheckBalanceBtn = document.getElementById('adminCheckBalanceBtn');
+            const adminAddCreditsBtn = document.getElementById('adminAddCreditsBtn');
+            const adminSubtractCreditsBtn = document.getElementById('adminSubtractCreditsBtn');
+            const adminBalanceDisplay = document.getElementById('adminBalanceDisplay');
+            const adminError = document.getElementById('adminError');
 
             let selectedAmount = null;
 
@@ -230,23 +260,32 @@
                 const user = getCurrentUser();
                 authArea.innerHTML = '';
                 if (user) {
-                    const balance = getUserBalance(user.id);
+                    const isAdmin = user.isAdmin === true;
+                    const balance = isAdmin ? '—' : getUserBalance(user.id);
                     const profileDiv = document.createElement('div');
                     profileDiv.className = 'profile-info';
+                    const adminBtnHtml = isAdmin ? `<button class="admin-btn" id="adminSettingsBtn" title="Настройки"><i class="fas fa-cog"></i></button>` : '';
                     profileDiv.innerHTML = `
+                        ${adminBtnHtml}
                         <div class="user-data">
                             <span class="user-name">${user.name}</span>
-                            <span class="user-id">ID: ${user.id}</span>
+                            <span class="user-id">ID: ${user.id}${isAdmin ? ' (админ)' : ''}</span>
                         </div>
+                        ${!isAdmin ? `
                         <div class="balance-area">
                             <i class="fas fa-coins coin-icon"></i>
                             <span class="balance-amount" id="balanceDisplay">${balance}</span>
                         </div>
                         <button class="topup-btn" id="topupBtn">+ Пополнить</button>
+                        ` : ''}
                         <button class="logout-btn" id="logoutBtn" title="Выйти"><i class="fas fa-sign-out-alt"></i></button>
                     `;
                     authArea.appendChild(profileDiv);
-                    document.getElementById('topupBtn').addEventListener('click', openTopupModal);
+                    if (isAdmin) {
+                        document.getElementById('adminSettingsBtn').addEventListener('click', openAdminModal);
+                    } else {
+                        document.getElementById('topupBtn').addEventListener('click', openTopupModal);
+                    }
                     document.getElementById('logoutBtn').addEventListener('click', logout);
                 } else {
                     const btn = document.createElement('button');
@@ -260,7 +299,7 @@
 
             function updateBalanceDisplay() {
                 const user = getCurrentUser();
-                if (user) {
+                if (user && !user.isAdmin) {
                     const balance = getUserBalance(user.id);
                     const disp = document.getElementById('balanceDisplay');
                     if (disp) disp.textContent = balance;
@@ -303,6 +342,12 @@
                 hideAuthErrors();
                 const name = loginName.value.trim();
                 const pass = loginPassword.value;
+                if (name === ADMIN_CREDENTIALS.name && pass === ADMIN_CREDENTIALS.password) {
+                    setCurrentUser({ name: 'ADMIN', id: 'ADMIN', isAdmin: true });
+                    closeAuthModal();
+                    renderAuthArea();
+                    return;
+                }
                 if (!isValidUsername(name)) {
                     loginError.textContent = 'Имя может содержать только латинские буквы и цифры';
                     loginError.style.display = 'block';
@@ -326,6 +371,11 @@
                 const name = regName.value.trim();
                 const pass = regPassword.value;
                 const pass2 = regPassword2.value;
+                if (name.toUpperCase() === 'ADMIN') {
+                    regNameError.textContent = 'Имя ADMIN зарезервировано';
+                    regNameError.style.display = 'block';
+                    return;
+                }
                 if (!isValidUsername(name)) {
                     regNameError.textContent = 'Имя может содержать только латинские буквы и цифры';
                     regNameError.style.display = 'block';
@@ -361,13 +411,12 @@
                 renderAuthArea();
             }
 
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab));
-            });
+            tabs.forEach(tab => tab.addEventListener('click', () => switchAuthTab(tab.dataset.tab)));
             closeAuthModalBtn.addEventListener('click', closeAuthModal);
             window.addEventListener('click', (e) => {
                 if (e.target === authModal) closeAuthModal();
                 if (e.target === topupModal) closeTopupModal();
+                if (e.target === adminModal) closeAdminModal();
             });
 
             function openTopupModal() {
@@ -409,7 +458,7 @@
             buyBtn.addEventListener('click', () => {
                 if (!selectedAmount || selectedAmount < 1) return;
                 const user = getCurrentUser();
-                if (!user) {
+                if (!user || user.isAdmin) {
                     topupError.textContent = 'Ошибка авторизации';
                     topupError.style.display = 'block';
                     return;
@@ -421,6 +470,63 @@
                 alert(`✅ Баланс пополнен на ${selectedAmount} AI-Кредитов.\nТекущий баланс: ${newBalance} кредитов.`);
                 closeTopupModal();
             });
+
+            function openAdminModal() {
+                adminModal.classList.add('active');
+                adminUserIdInput.value = '';
+                adminCreditAmount.value = '';
+                adminBalanceDisplay.textContent = '';
+                adminError.style.display = 'none';
+            }
+            function closeAdminModal() { adminModal.classList.remove('active'); }
+            closeAdminModalBtn.addEventListener('click', closeAdminModal);
+
+            adminCheckBalanceBtn.addEventListener('click', () => {
+                const userId = adminUserIdInput.value.trim();
+                if (!userId) {
+                    adminBalanceDisplay.textContent = 'Введите ID';
+                    return;
+                }
+                const balance = getUserBalance(userId);
+                adminBalanceDisplay.textContent = `Баланс: ${balance} кредитов`;
+            });
+
+            function handleAdminTransaction(operation) {
+                const userId = adminUserIdInput.value.trim();
+                const amount = parseInt(adminCreditAmount.value);
+                if (!userId) {
+                    adminError.textContent = 'Введите ID пользователя';
+                    adminError.style.display = 'block';
+                    return;
+                }
+                if (isNaN(amount) || amount < 1) {
+                    adminError.textContent = 'Введите корректное количество кредитов';
+                    adminError.style.display = 'block';
+                    return;
+                }
+
+                const currentBalance = getUserBalance(userId);
+                let newBalance;
+
+                if (operation === 'add') {
+                    newBalance = currentBalance + amount;
+                } else if (operation === 'subtract') {
+                    if (amount > currentBalance) {
+                        adminError.textContent = `Недостаточно кредитов. Баланс: ${currentBalance}`;
+                        adminError.style.display = 'block';
+                        return;
+                    }
+                    newBalance = currentBalance - amount;
+                }
+
+                setUserBalance(userId, newBalance);
+                adminBalanceDisplay.textContent = `Баланс: ${newBalance} кредитов (${operation === 'add' ? '+' : '-'}${amount})`;
+                adminError.style.display = 'none';
+                adminCreditAmount.value = '';
+            }
+
+            adminAddCreditsBtn.addEventListener('click', () => handleAdminTransaction('add'));
+            adminSubtractCreditsBtn.addEventListener('click', () => handleAdminTransaction('subtract'));
 
             renderAuthArea();
         })();
